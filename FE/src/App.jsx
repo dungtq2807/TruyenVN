@@ -1,18 +1,20 @@
-import { Route, Routes } from 'react-router-dom';
-import LayOutHomePage from './components/LayOut/LayOutHomePage';
-import '../src/App.css'
+import { Route, Routes } from "react-router-dom"
+import LayOutHome from "./components/Layout/LayOutHomePage"
+import HomePage from "./components/Page/HomePage"
+
+
+
+
 function App() {
 
 
   return (
     <>
-     <Routes>
-     
-      <Route path='/' element={<LayOutHomePage/>}>
-      <Route index element={<>hhhh</>}/>
-      </Route>
-
-     </Routes>
+  <Routes>
+    <Route path="/" element={<LayOutHome/>}>
+    <Route index element={<HomePage/>}/>
+    </Route>
+  </Routes>
     </>
   )
 }
