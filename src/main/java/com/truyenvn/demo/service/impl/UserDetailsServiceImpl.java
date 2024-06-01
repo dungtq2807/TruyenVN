@@ -21,4 +21,5 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return repository.findByUsername(username)
                 .orElseThrow(()-> new UsernameNotFoundException("User not found"));
     }
+
 }

@@ -1,5 +1,6 @@
 package com.truyenvn.demo.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -33,5 +34,6 @@ public class History {
     @JoinColumn(name = "id_comic_detail", referencedColumnName = "id")
     private ComicDetail comicDetail;
 
+    @Column(name = "chapter_readed")
     private String chapterReaded;
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,18 +20,20 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Category")
-public class Category {
+@Table(name = "Comic_Upload")
+public class ComicUpload {
 
     @Id
     @GeneratedValue
     private UUID id;
 
-    private String code;
+    @ManyToOne
+    @JoinColumn(name = "id_users", referencedColumnName = "id")
+    private User user;
 
-    private String category;
-
-    private Integer status;
+    @ManyToOne
+    @JoinColumn(name = "id_comic", referencedColumnName = "id")
+    private ComicDetail comicDetail;
 
     @Column(name = "created_at")
     private String createdAt;
