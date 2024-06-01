@@ -1,3 +1,4 @@
+import Footer from '../../Footer/Footer'
 import Banner from '../Header/Banner'
 import HeaderHomePage from '../Header/HeaderHomePage'
 import { Outlet } from 'react-router-dom'
@@ -8,6 +9,7 @@ const LayOutHomePage = () => {
     <HeaderHomePage/>
     <Banner/>
     <Outlet/>
+    <Footer/>
     </div>
   )
 }
