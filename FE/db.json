@@ -1,0 +1,124 @@
+{
+    "products": [
+      {
+        "id": "9be2",
+        "name": "product 11 new ",
+        "price": "100",
+        "image": "https://picsum.photos/200/300",
+        "description": "ngon bổ  new",
+        "categoryID": "1"
+      },
+      {
+        "id": "a975",
+        "name": "product 2",
+        "price": "200",
+        "image": "https://picsum.photos/200/300",
+        "description": "OPPO F19 is officially announced on April 2021.",
+        "categoryID": "2"
+      },
+      {
+        "id": "6d42",
+        "name": "iPhone X 128GB (Chính Hãng VN/A)",
+        "price": "100",
+        "image": "https://picsum.photos/id/50/200/300",
+        "description": "OPPO F19 is officially announced on April 2021.",
+        "categoryID": 2,
+        "categoryId": "3",
+        "stock": "30"
+      },
+      {
+        "id": "49f7",
+        "name": "iPhone X 128GB (Chính Hãng VN/A)",
+        "price": "100",
+        "image": "https://picsum.photos/200/300",
+        "description": "OPPO F19 is officially announced on April 2021.",
+        "categoryID": "2"
+      },
+      {
+        "id": "6fb7",
+        "name": "iPhone X 128GB (Chính Hãng VN/A)",
+        "price": "200",
+        "image": "https://picsum.photos/200/300",
+        "description": "OPPO F19 is officially announced on April 2021.",
+        "categoryID": 2
+      },
+      {
+        "name": "iPhone X 128GB (Chính Hãng VN/A)",
+        "price": "1",
+        "image": "https://picsum.photos/200/300",
+        "description": "OPPO F19 is officially announced on April 2021.",
+        "id": "9b7VISE",
+        "categoryID": 2
+      },
+      {
+        "name": "iPhone X 128GB (Chính Hãng VN/A)",
+        "price": "1",
+        "image": "https://picsum.photos/200/300",
+        "description": "OPPO F19 is officially announced on April 2021.",
+        "id": "WlVutqy",
+        "categoryID": "1"
+      },
+      {
+        "name": "iPhone X 128GB (Chính Hãng VN/A)",
+        "price": "1",
+        "image": "https://picsum.photos/200/300",
+        "description": "OPPO F19 is officially announced on April 2021.",
+        "id": "6D617Ec",
+        "categoryID": "3"
+      },
+      {
+        "name": "iPhone X 128GB (Chính Hãng VN/A)",
+        "price": "1",
+        "image": "https://picsum.photos/200/300",
+        "description": "OPPO F19 is officially announced on April 2021.",
+        "id": "WdwtaDX"
+      },
+      {
+        "name": "iPhone X 128GB (Chính Hãng VN/A)",
+        "price": "1",
+        "image": "https://picsum.photos/200/300",
+        "description": "OPPO F19 is officially announced on April 2021.",
+        "id": "ZaNac-9"
+      },
+      {
+        "name": "iPhone X 128GB (Chính Hãng VN/A)",
+        "price": "1",
+        "image": "https://picsum.photos/200/300",
+        "description": "OPPO F19 is officially announced on April 2021.",
+        "id": "uIv85LW"
+      },
+      {
+        "name": "iPhone X 128GB (Chính Hãng VN/A)",
+        "price": "22",
+        "image": "https://picsum.photos/200/300",
+        "description": "ngon bổ rẻ",
+        "id": "mzFJ7uc"
+      },
+      {
+        "name": "product 11",
+        "price": "999",
+        "image": "https://picsum.photos/200/300",
+        "description": "ngon bổ rẻ",
+        "categoryID": "1",
+        "id": "We3eVbd"
+      },
+      {
+        "name": "sản phẩm mớiq",
+        "price": "1000",
+        "image": "https://picsum.photos/200/300",
+        "description": "noooo",
+        "categoryID": "1",
+        "id": "_t8KPd9"
+      },
+      {
+        "name": "0404",
+        "price": "0400",
+        "image": "https://picsum.photos/200/300",
+        "description": "qqqq",
+        "categoryID": "3",
+        "id": "ZBrfm4q"
+      }
+    ],
+    "users": [
+    ]
+  }
