@@ -1,13 +1,15 @@
 import { Route, Routes } from "react-router-dom";
-import LayOutHome from "./components/Layout/LayOutHomePage";
+
 import HomePage from "./components/Page/HomePage";
 
-import LayOutAdmin from "./components/Layout/LayOutAdmin";
 
 import { Toaster } from "sonner";
 import ProductList from "./components/Admin/Product/ProductList";
 import ProductAdd from "./components/Admin/Product/ProductAdd";
 import ProductEdit from "./components/Admin/Product/ProductEdit";
+import LayOutHome from "./components/LayOut/LayOutHomePage";
+
+import LayOutAdmin from "./components/LayOut/LayOutAdmin";
 
 function App() {
   return (
@@ -20,7 +22,7 @@ function App() {
         expand={true}
       />
       <Routes>
-        <Route path="/" element={<LayOutHome />}>
+        <Route path="/" element={<LayOutHome/>}>
           <Route index element={<HomePage />} />
         </Route>
 
