@@ -10,6 +10,9 @@ import ProductEdit from "./components/Admin/Product/ProductEdit";
 import LayOutHome from "./components/LayOut/LayOutHomePage";
 
 import LayOutAdmin from "./components/LayOut/LayOutAdmin";
+import CategorytList from "./components/Admin/Category/CategoryList";
+import CategoryAdd from "./components/Admin/Category/CategoryAdd";
+import CategorytEdit from "./components/Admin/Category/CategoryEdit";
 
 function App() {
   return (
@@ -31,6 +34,11 @@ function App() {
           <Route index element={<ProductList/>}/>
           <Route path="add" element={<ProductAdd/>}/>
           <Route path="edit/:id" element={<ProductEdit/>}/>
+        </Route>
+        <Route path="category">
+          <Route index element={<CategorytList/>}/>
+          <Route path="add" element={<CategoryAdd/>}/>
+          <Route path="edit/:id" element={<CategorytEdit/>}/>
         </Route>
         </Route>
       </Routes>
