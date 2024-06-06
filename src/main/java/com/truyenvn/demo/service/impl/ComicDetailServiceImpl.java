@@ -6,6 +6,9 @@ import com.truyenvn.demo.repository.ComicDetailRepository;
 import com.truyenvn.demo.repository.ComicRepository;
 import com.truyenvn.demo.service.ComicDetailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,8 +24,9 @@ public class ComicDetailServiceImpl implements ComicDetailService {
     private final ComicRepository comicRepository;
 
     @Override
-    public List<ComicDetail> getAll() {
-        return repository.findAll();
+    public Page<ComicDetail> getAll(Integer page) {
+        Pageable comicDetails = PageRequest.of(page, 20);
+        return repository.getAll(comicDetails);
     }
 
     @Override
