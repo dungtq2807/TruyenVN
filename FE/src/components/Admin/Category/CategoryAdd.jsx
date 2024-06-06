@@ -1,17 +1,22 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation} from "@tanstack/react-query";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
+import Joi from "joi";
+import { joiResolver } from "@hookform/resolvers/joi";
+const categoryChema = Joi.object({
+  name: Joi.string().required().min(3),
+});
 const CategoryAdd = () => {
-  const queryClient = useQueryClient();
+
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
+    resolver: joiResolver(categoryChema),
     defaultValues: {
       name: "",
     },
@@ -26,28 +31,23 @@ const CategoryAdd = () => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["CATEGORY"],
-      });
       toast.success("Danh mục đã được thêm thành công!");
       navigate("/admin/category");
     },
     onError: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["CATEGORY"],
-      });
       toast.error("Danh mục không được thêm");
       navigate("/admin/category");
     },
   });
   const onSubmit = (data) => {
+  
     mutate(data);
   };
   return (
     <>
       <div>Thêm Danh Mục</div>
       <div className="flex justify-end">
-        <a href="/admin/product">
+        <a href="/admin/category">
           <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
             Quay Lại
           </button>
@@ -67,8 +67,7 @@ const CategoryAdd = () => {
                   {...register("name", { required: true })}
                   type="text"
                 />
-
-                {errors.name && <span>không được để trống</span>}
+                {errors?.name && <span>{errors?.name?.message}</span>}
               </div>
 
               <button>{isPending ? "Đang Thêm..." : "Thêm"}</button>

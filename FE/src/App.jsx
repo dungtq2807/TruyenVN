@@ -13,6 +13,8 @@ import LayOutAdmin from "./components/LayOut/LayOutAdmin";
 import CategorytList from "./components/Admin/Category/CategoryList";
 import CategoryAdd from "./components/Admin/Category/CategoryAdd";
 import CategorytEdit from "./components/Admin/Category/CategoryEdit";
+import SignIn from "./components/Auth/SignIn";
+import SignUp from "./components/Auth/SignUp";
 
 function App() {
   return (
@@ -27,8 +29,15 @@ function App() {
       <Routes>
         <Route path="/" element={<LayOutHome/>}>
           <Route index element={<HomePage />} />
+          
+          
         </Route>
 
+        <Route path="signin" element={<SignIn />} />
+          <Route path="signup" element={<SignUp />} />
+
+
+          
         <Route path="/admin" element={<LayOutAdmin/>}>
         <Route path="product">
           <Route index element={<ProductList/>}/>

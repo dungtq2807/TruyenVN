@@ -1,13 +1,18 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
+import Joi from "joi";
+import { joiResolver } from "@hookform/resolvers/joi";
+const categoryChema = Joi.object({
+  id:Joi.string(),
+  name: Joi.string().required().min(3),
 
+});
 
 const CategorytEdit = () => {
   const { id } = useParams();
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const {
     register,
@@ -15,12 +20,13 @@ const CategorytEdit = () => {
     reset,
     formState: { errors },
   } = useForm({
+    resolver:joiResolver(categoryChema),
     defaultValues: {
       name: "",
     },
   });
   useQuery({
-    queryKey: ["PRODUCT_DETAIL", id],
+    queryKey: ["CAtEGORY_DETAIL", id],
     queryFn: async () => {
       const { data } = await axios.get(`http://localhost:3000/categories/${id}`);
       reset(data);
@@ -29,24 +35,20 @@ const CategorytEdit = () => {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (product) => {
+    mutationFn: async (category) => {
       const { data } = await axios.put(
-        `http://localhost:3000/categories/${product.id}`,
-        product
+        `http://localhost:3000/categories/${category.id}`,
+        category
       );
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["CATEGORY"],
-      });
+
       toast.success("Danh mục đã được thêm thành công!");
       navigate("/admin/category");
     },
     onError: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["CATEGORY"],
-      });
+
       toast.error("Danh mục không được thêm");
       navigate("/admin/category");
     },
@@ -76,11 +78,11 @@ const CategorytEdit = () => {
                 </label>
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                  {...register("name", { required: true })}
+                  {...register("name", { required: true,minLength:3 })}
                   type="text"
                 />
 
-                {errors.name && <span>không được để trống</span>}
+                {errors?.name && (<span>{errors?.name?.message}</span>)}
               </div>
 
              
