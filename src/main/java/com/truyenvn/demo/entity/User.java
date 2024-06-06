@@ -39,8 +39,14 @@ public class User implements UserDetails {
 
     private String password;
 
+    private String avatar;
+
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -5,6 +5,7 @@ import com.truyenvn.demo.entity.ComicDetail;
 import com.truyenvn.demo.service.impl.ComicDetailServiceImpl;
 import com.truyenvn.demo.service.impl.GetImageServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +32,8 @@ public class ComicDetailController {
     private final GetImageServiceImpl getComicDetail;
 
     @GetMapping("getAll")
-    private ResponseEntity getAll() {
-        List<ComicDetail> comicDetails = comicDetailService.getAll();
+    private ResponseEntity getAllComic(@RequestParam(defaultValue = "0") Integer page) {
+        Page<ComicDetail> comicDetails = comicDetailService.getAll(page);
         List<ComicDetailResponse> responses = comicDetails.stream().map(comicDetail -> {
             String imageUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
                     .path(comicDetail.getId().toString())
@@ -62,12 +63,10 @@ public class ComicDetailController {
     @PostMapping("post")
     private ResponseEntity post(@RequestParam String name,
                                 @RequestParam String description,
-                                @RequestParam String updateAt,
-                                @RequestParam String createdAt,
                                 @RequestParam MultipartFile file
     ) {
         try {
-            return ResponseEntity.ok(comicDetailService.add(name, description, updateAt, createdAt, file));
+            return ResponseEntity.ok(comicDetailService.add(name, description, file));
         } catch (IOException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -1,9 +1,7 @@
 package com.truyenvn.demo.controller;
 
-import com.truyenvn.demo.dto.ComicDetailResponse;
 import com.truyenvn.demo.entity.Comic;
 import com.truyenvn.demo.entity.ComicDetail;
-import com.truyenvn.demo.service.impl.ComicDetailServiceImpl;
 import com.truyenvn.demo.service.impl.GetImageServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -13,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Optional;
 import java.util.UUID;

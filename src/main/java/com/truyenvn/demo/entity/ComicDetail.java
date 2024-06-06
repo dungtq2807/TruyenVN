@@ -55,8 +55,4 @@ public class ComicDetail {
     @JoinColumn(name = "id_category", referencedColumnName = "id")
     private Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "id_comments", referencedColumnName = "id")
-    private Comments comments;
-
 }
