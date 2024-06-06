@@ -24,22 +24,22 @@ const Banner = () => {
     <div className="container m-auto">
     <Slider {...settings} >
       <div>
-        <img src="https://picsum.photos/id/1/1536/300" alt="" />
+      <img src="https://picsum.photos/id/100/1536/300" alt="" />
       </div>
       <div>
-      <img src="https://picsum.photos/id/2/1536/300" alt="" />
+      <img src="https://picsum.photos/id/101/1536/300" alt="" />
       </div>
       <div>
-      <img src="https://picsum.photos/id/3/1536/300" alt="" />
+      <img src="https://picsum.photos/id/102/1536/300" alt="" />
       </div>
       <div>
-      <img src="https://picsum.photos/id/4/200/300" alt="" />
+      <img src="https://picsum.photos/id/103/1536/300" alt="" />
       </div>
       <div>
-      <img src="https://picsum.photos/id/5/200/300" alt="" />
+      <img src="https://picsum.photos/id/104/1536/300" alt="" />
       </div>
       <div>
-      <img src="https://picsum.photos/id/6/200/300" alt="" />
+      <img src="https://picsum.photos/id/106/1536/300" alt="" />
       </div>
     </Slider>
   </div>
