@@ -11,5 +11,5 @@ public interface ComicDetailService {
 
     Page<ComicDetail> getAll(Integer page);
 
-    ComicDetail add(String name, String description, String updateAt, String createdAt, MultipartFile file) throws IOException;
+    ComicDetail add(String name, String description, MultipartFile file) throws IOException;
 }

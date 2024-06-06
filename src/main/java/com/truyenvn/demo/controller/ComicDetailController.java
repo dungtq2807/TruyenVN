@@ -63,12 +63,10 @@ public class ComicDetailController {
     @PostMapping("post")
     private ResponseEntity post(@RequestParam String name,
                                 @RequestParam String description,
-                                @RequestParam String updateAt,
-                                @RequestParam String createdAt,
                                 @RequestParam MultipartFile file
     ) {
         try {
-            return ResponseEntity.ok(comicDetailService.add(name, description, updateAt, createdAt, file));
+            return ResponseEntity.ok(comicDetailService.add(name, description, file));
         } catch (IOException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
