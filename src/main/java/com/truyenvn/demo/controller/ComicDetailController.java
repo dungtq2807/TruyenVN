@@ -37,6 +37,7 @@ public class ComicDetailController {
         Page<ComicDetail> comicDetails = comicDetailService.getAll(page);
         List<ComicDetailResponse> responses = comicDetails.stream().map(comicDetail -> {
             String imageUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("img/")
                     .path(comicDetail.getId().toString())
                     .toUriString();
             return new ComicDetailResponse(comicDetail, imageUrl);
@@ -52,6 +53,7 @@ public class ComicDetailController {
             ComicDetail comicDetail = comicDetailOptional.get();
             // Tạo URL ảnh
             String imageUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("img/")
                     .path(id.toString())
                     .toUriString();
             ComicDetailResponse response = new ComicDetailResponse(comicDetail, imageUrl);
