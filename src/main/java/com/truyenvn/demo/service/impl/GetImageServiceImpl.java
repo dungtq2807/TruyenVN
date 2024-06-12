@@ -17,8 +17,8 @@ public class GetImageServiceImpl {
     private final ComicRepository comicRepository;
     private final ComicDetailRepository repository;
 
-    public Optional<ComicDetail> findById(UUID id) {
-        return repository.findById(id);
+    public Optional<Comic> findById(UUID id) {
+        return comicRepository.findById(id);
     }
 
 }

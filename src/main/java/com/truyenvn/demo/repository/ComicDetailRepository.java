@@ -7,11 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface ComicDetailRepository extends JpaRepository<ComicDetail, UUID> {
 
-    @Query("select d from ComicDetail d order by d.dateUpdatedAt desc")
-    Page<ComicDetail> getAll(Pageable pageable);
+    @Query(value = "select c from ComicDetail c where c.comic.id = ?1")
+    List<ComicDetail> findAllByIdComic(UUID id);
 }

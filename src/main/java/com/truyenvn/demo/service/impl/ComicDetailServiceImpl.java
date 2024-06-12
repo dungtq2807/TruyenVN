@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,73 +33,105 @@ public class ComicDetailServiceImpl implements ComicDetailService {
     private final UserDetailsService userDetailsService;
 
     @Override
-    public Page<ComicDetail> getAll(Integer page) {
+    public Page<Comic> getAll(Integer page) {
         Pageable comicDetails = PageRequest.of(page, 20);
-        return repository.getAll(comicDetails);
+        Page<Comic> details = comicRepository.findAll(comicDetails);
+        return details;
     }
 
     @Override
-    public ComicDetail add(String name, String description, MultipartFile file) throws IOException {
+    public Comic findOneByIdComic(UUID id) {
+        return comicRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<ComicDetail> findByIdComic(UUID id) {
+        return repository.findAllByIdComic(id);
+    }
+
+    @Override
+    public List<ComicDetail> addComicDetail(List<ComicDetail> comicDetails) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        comicDetails.forEach(comicDetail -> {
+            comicDetail.setComic(comicDetail.getComic());
+            comicDetail.setCategory(comicDetail.getCategory());
+            comicDetail.setStatus(1);
+            comicDetail.setCreatedAt(user.getFullName());
+            comicDetail.setUpdatedAt(user.getFullName());
+            comicDetail.setDateCreatedAt(new Date());
+            comicDetail.setDateUpdatedAt(new Date());
+        });
+        return repository.saveAll(comicDetails);
+    }
+
+
+    @Override
+    public ComicDetail updateComicDetail(ComicDetail comicDetail) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        ComicDetail comicDetail1 = repository.findById(comicDetail.getId()).orElse(null);
+        if (comicDetail == null) {
+            throw new EntityNotFoundException("ComicDetail not found");
+        }
+        if(comicDetail.getComic() != null){
+            comicDetail1.setComic(comicDetail.getComic());
+        }
+        if(comicDetail.getCategory() != null){
+            comicDetail1.setCategory(comicDetail.getCategory());
+        }
+        if(comicDetail.getStatus() != null){
+            comicDetail1.setStatus(comicDetail.getStatus());
+        }
+        comicDetail1.setUpdatedAt(user.getFullName());
+        comicDetail1.setDateUpdatedAt(new Date());
+        return repository.save(comicDetail1);
+    }
+
+    @Override
+    public Comic addComic(String name, String description, MultipartFile file) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Comic comic = new Comic().builder()
                 .name(name)
                 .image(file.getBytes())
                 .description(description)
+                .viewed(0)
                 .status(1)
                 .createdAt(user.getFullName())
                 .updatedAt(user.getFullName())
                 .dateCreatedAt(new Date())
                 .dateUpdatedAt(new Date())
                 .build();
-        comicRepository.save(comic);
-        ComicDetail comicDetail = new ComicDetail();
-        comicDetail.setComic(comic);
-        comicDetail.setStatus(1);
-        comicDetail.setViewed(0);
-        comicDetail.setCreatedAt(user.getFullName());
-        comicDetail.setUpdatedAt(user.getFullName());
-        comicDetail.setDateCreatedAt(new Date());
-        comicDetail.setDateUpdatedAt(new Date());
-        return repository.save(comicDetail);
+        return comicRepository.save(comic);
     }
 
     @Override
-    public ComicDetail update(UUID id, String name, String description, MultipartFile file, Integer status) throws IOException {
+    public Comic updateComic(UUID id, String name, String description, MultipartFile file,Integer viewed, Integer status) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-
-        // Lấy ComicDetail từ repository
-        ComicDetail comicDetail = repository.findById(id).orElse(null);
-        if (comicDetail == null) {
-            throw new EntityNotFoundException("ComicDetail not found");
-        }
-
-        // Lấy Comic từ comicRepository
-        Comic comic = comicRepository.findById(comicDetail.getComic().getId()).orElse(null);
+        Comic comic = comicRepository.findById(id).orElse(null);
         if (comic == null) {
             throw new EntityNotFoundException("Comic not found");
         }
-
-        // Cập nhật các thuộc tính của Comic
-        comic.setName(name);
-        comic.setImage(file.getBytes());
-        comic.setDescription(description);
-        comic.setStatus(status);
+        if(name != null){
+            comic.setName(name);
+        }
+        if (file != null && !file.isEmpty()) {
+            comic.setImage(file.getBytes());
+        }
+        if(description != null){
+            comic.setDescription(description);
+        }
+        if(status != null){
+            comic.setStatus(status);
+        }
+        if(viewed != null){
+            comic.setViewed(viewed);
+        }
         comic.setUpdatedAt(user.getFullName());
         comic.setDateUpdatedAt(new Date());
-
-        // Lưu Comic
-        comicRepository.save(comic);
-
-        // Cập nhật các thuộc tính của ComicDetail
-        comicDetail.setComic(comic);
-        comicDetail.setStatus(status);
-        comicDetail.setUpdatedAt(user.getFullName());
-        comicDetail.setDateUpdatedAt(new Date());
-
-        // Lưu ComicDetail
-        return repository.save(comicDetail);
+        return comicRepository.save(comic);
     }
 
 }

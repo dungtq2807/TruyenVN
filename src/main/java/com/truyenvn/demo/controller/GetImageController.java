@@ -23,10 +23,9 @@ public class GetImageController {
 
     @GetMapping("img/{id}")
     public ResponseEntity<byte[]> getComicImage(@PathVariable UUID id) {
-        Optional<ComicDetail> comicDetailOptional = getComicDetail.findById(id);
+        Optional<Comic> comicDetailOptional = getComicDetail.findById(id);
         if (comicDetailOptional.isPresent()) {
-            ComicDetail comicDetail = comicDetailOptional.get();
-            Comic comic = comicDetail.getComic();
+            Comic comic = comicDetailOptional.get();
             if (comic != null && comic.getImage() != null) {
                 return ResponseEntity.ok()
                         .contentType(MediaType.IMAGE_JPEG)

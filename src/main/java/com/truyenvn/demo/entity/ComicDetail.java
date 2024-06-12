@@ -27,8 +27,6 @@ public class ComicDetail {
     @GeneratedValue
     private UUID id;
 
-    private Integer viewed;
-
     private Integer status;
 
     @Column(name = "created_at")

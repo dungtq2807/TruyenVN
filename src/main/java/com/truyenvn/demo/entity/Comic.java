@@ -31,6 +31,8 @@ public class Comic {
 
     private String description;
 
+    private Integer viewed;
+
     private Integer status;
 
     @Column(name = "created_at")
