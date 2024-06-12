@@ -44,10 +44,6 @@ public class ComicDetail {
     private Date dateCreatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "id_chapter", referencedColumnName = "id")
-    private Chapter chapter;
-
-    @ManyToOne
     @JoinColumn(name = "id_comic", referencedColumnName = "id")
     private Comic comic;
 

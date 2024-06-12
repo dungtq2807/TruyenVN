@@ -6,6 +6,7 @@ import com.truyenvn.demo.entity.User;
 import com.truyenvn.demo.repository.ComicDetailRepository;
 import com.truyenvn.demo.repository.ComicRepository;
 import com.truyenvn.demo.service.ComicDetailService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -60,4 +62,43 @@ public class ComicDetailServiceImpl implements ComicDetailService {
         comicDetail.setDateUpdatedAt(new Date());
         return repository.save(comicDetail);
     }
+
+    @Override
+    public ComicDetail update(UUID id, String name, String description, MultipartFile file, Integer status) throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        // Lấy ComicDetail từ repository
+        ComicDetail comicDetail = repository.findById(id).orElse(null);
+        if (comicDetail == null) {
+            throw new EntityNotFoundException("ComicDetail not found");
+        }
+
+        // Lấy Comic từ comicRepository
+        Comic comic = comicRepository.findById(comicDetail.getComic().getId()).orElse(null);
+        if (comic == null) {
+            throw new EntityNotFoundException("Comic not found");
+        }
+
+        // Cập nhật các thuộc tính của Comic
+        comic.setName(name);
+        comic.setImage(file.getBytes());
+        comic.setDescription(description);
+        comic.setStatus(status);
+        comic.setUpdatedAt(user.getFullName());
+        comic.setDateUpdatedAt(new Date());
+
+        // Lưu Comic
+        comicRepository.save(comic);
+
+        // Cập nhật các thuộc tính của ComicDetail
+        comicDetail.setComic(comic);
+        comicDetail.setStatus(status);
+        comicDetail.setUpdatedAt(user.getFullName());
+        comicDetail.setDateUpdatedAt(new Date());
+
+        // Lưu ComicDetail
+        return repository.save(comicDetail);
+    }
+
 }

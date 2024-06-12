@@ -45,7 +45,7 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        req->req.requestMatchers("/login/**","/register/**", "demo")
+                        req->req.requestMatchers("/login/**","/register/**")
                                 .permitAll()
                                 .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
                                 .anyRequest()
@@ -67,7 +67,6 @@ public class SecurityConfig {
                 .build();
 
     }
-
 
 
     @Configuration
