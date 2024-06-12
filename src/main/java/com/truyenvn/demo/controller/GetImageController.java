@@ -21,7 +21,7 @@ public class GetImageController {
 
     private final GetImageServiceImpl getComicDetail;
 
-    @GetMapping("/{id}")
+    @GetMapping("img/{id}")
     public ResponseEntity<byte[]> getComicImage(@PathVariable UUID id) {
         Optional<ComicDetail> comicDetailOptional = getComicDetail.findById(id);
         if (comicDetailOptional.isPresent()) {
