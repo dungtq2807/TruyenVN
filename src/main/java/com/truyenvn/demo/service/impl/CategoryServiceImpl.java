@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> getAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public Category getOneCategory(UUID id) {
+        return repository.findById(id).orElse(null);
     }
 
     @Override
