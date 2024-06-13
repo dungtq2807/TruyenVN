@@ -32,8 +32,8 @@ public class Follow {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "id_comic_detail", referencedColumnName = "id")
-    private ComicDetail comicDetail;
+    @JoinColumn(name = "id_comic", referencedColumnName = "id")
+    private Comic comic;
 
     @Column(name = "chapter_readed")
     private String chapterReaded;

@@ -93,6 +93,7 @@ public class ComicDetailServiceImpl implements ComicDetailService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Comic comic = new Comic().builder()
+                .user(user)
                 .name(name)
                 .image(file.getBytes())
                 .description(description)
