@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -66,7 +65,6 @@ public class ImageServiceImpl implements ImageService {
             img.setChapter(chapter);
             imageList.add(img);
         }
-
         return repository.saveAll(imageList); // Lưu tất cả các hình ảnh vào cơ sở dữ liệu
     }
 

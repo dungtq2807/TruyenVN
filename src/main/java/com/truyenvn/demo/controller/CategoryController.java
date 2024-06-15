@@ -41,4 +41,5 @@ public class CategoryController {
     private ResponseEntity updateCategory(@RequestBody Category category) {
         return new ResponseEntity<>(service.updateCategory(category), HttpStatus.OK);
     }
+
 }
