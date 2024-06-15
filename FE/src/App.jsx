@@ -12,7 +12,7 @@ import LayOutHome from "./components/LayOut/LayOutHomePage";
 import LayOutAdmin from "./components/LayOut/LayOutAdmin";
 import CategorytList from "./components/Admin/Category/CategoryList";
 import CategoryAdd from "./components/Admin/Category/CategoryAdd";
-import CategorytEdit from "./components/Admin/Category/CategoryEdit";
+import CategoryEdit from "./components/Admin/Category/CategoryEdit";
 import SignIn from "./components/Auth/SignIn";
 import SignUp from "./components/Auth/SignUp";
 
@@ -37,8 +37,6 @@ function App() {
     
 
 
-        <Route path="signin" element={<SignIn />} />
-        <Route path="signup" element={<SignUp />} />
 
         <Route path="/admin" element={<LayOutAdmin/>}>
         <Route path="product">
@@ -49,7 +47,7 @@ function App() {
         <Route path="category">
           <Route index element={<CategorytList/>}/>
           <Route path="add" element={<CategoryAdd/>}/>
-          <Route path="edit/:id" element={<CategorytEdit/>}/>
+          <Route path="edit/:id" element={<CategoryEdit/>}/>
         </Route>
         </Route>
       </Routes>

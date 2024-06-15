@@ -1,19 +1,18 @@
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
+
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
+import axiosInstance from "../conf/axiosInstance";
 const signupChema = Joi.object({
   username: Joi.string().required().min(3),
-  // email: Joi.string().email( {tlds: { allow:false } }).required(),
   password: Joi.string().required().min(6),
   confirmPassword: Joi.string().valid(Joi.ref("password")).required(),
   role: Joi.string(),
 });
 const SignUp = () => {
-  // const queryClient = useQueryClient();
   const navigate = useNavigate();
   const {
     register,
@@ -23,7 +22,6 @@ const SignUp = () => {
     resolver: joiResolver(signupChema),
     defaultValues: {
       username: "",
-      // email: "",
       password: "",
       confirmPassword: "",
       role: "USER",
@@ -32,8 +30,8 @@ const SignUp = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (signup) => {
-      const { data } = await axios.post(
-        `http://localhost:8080/register`,
+      const { data } = await axiosInstance.post(
+        `/register`,
         signup
       );
       return data;
