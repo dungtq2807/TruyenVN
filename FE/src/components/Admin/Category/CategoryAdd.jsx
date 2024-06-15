@@ -1,31 +1,34 @@
-import { useMutation} from "@tanstack/react-query";
-import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
-const categoryChema = Joi.object({
-  name: Joi.string().required().min(3),
-});
-const CategoryAdd = () => {
+import axiosInstance from "../../conf/axiosInstance";
 
+const categorySchema = Joi.object({
+  category: Joi.string().required().min(3),
+});
+
+const CategoryAdd = () => {
+  
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: joiResolver(categoryChema),
+    resolver: joiResolver(categorySchema),
     defaultValues: {
-      name: "",
-    },
+      category: "",
+      // status:0||1 
+     },
   });
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (category) => {
-      const { data } = await axios.post(
-        `http://localhost:3000/categories`,
+      const { data } = await axiosInstance.post(
+        `/api/v1/category/add-category`,
         category
       );
       return data;
@@ -39,43 +42,47 @@ const CategoryAdd = () => {
       navigate("/admin/category");
     },
   });
+
   const onSubmit = (data) => {
-  
     mutate(data);
   };
+
   return (
-    <>
-      <div>Thêm Danh Mục</div>
-      <div className="flex justify-end">
+    <div className="p-4">
+      <h2 className="text-xl font-bold mb-4">Thêm Danh Mục</h2>
+      <div className="flex justify-end mb-4">
         <a href="/admin/category">
-          <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
             Quay Lại
           </button>
         </a>
       </div>
 
-      <div>
-        <div>
-          <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Tên Danh Mục:
-                </label>
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                  {...register("name", { required: true })}
-                  type="text"
-                />
-                {errors?.name && <span>{errors?.name?.message}</span>}
-              </div>
-
-              <button>{isPending ? "Đang Thêm..." : "Thêm"}</button>
-            </form>
+      <div className="max-w-md">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Tên Danh Mục:
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              {...register("category", { required: true })}
+              type="text"
+            />
+            {errors?.category && (
+              <span className="text-red-500">{errors?.category?.message}</span>
+            )}
           </div>
-        </div>
+
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+          >
+            {isPending ? "Đang Thêm..." : "Thêm"}
+          </button>
+        </form>
       </div>
-    </>
+    </div>
   );
 };
 

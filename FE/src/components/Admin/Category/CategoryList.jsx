@@ -1,6 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+
 import { toast } from "sonner";
+import axiosInstance from "../../conf/axiosInstance";
+import { Link } from "react-router-dom";
+
 const CategorytList = () => {
   const queryClient = useQueryClient();
 
@@ -8,7 +11,7 @@ const CategorytList = () => {
     queryKey: ["CATEGORY"], //từ khóa truy vấn để xác định loại dự liệu cần lấy
     queryFn: async () => {
       //Hàm queryFn thực hiện yêu cầu GET để lấy dữ liệu từ URL cụ thể
-      const { data } = await axios.get(`http://localhost:3000/categories`);
+      const { data } = await axiosInstance.get(`/api/v1/category/getAll`);
       return data;
     },
   });
@@ -23,7 +26,7 @@ const CategorytList = () => {
       );
       if (isConfirmed) {
         // Nếu người dùng xác nhận, gửi yêu cầu DELETE đến URL cụ thể bằng Axios
-        await axios.delete(`http://localhost:3000/categories/${id}`);
+        await axiosInstance.get(`/api/v1/category/get-one-category/${id}`);
         // Hiển thị toast thông báo thành công
         toast.success("Sản phẩm đã được xóa thành công");
       } else {
@@ -53,9 +56,10 @@ const CategorytList = () => {
   });
   return (
     <>
+      <div>
       <div>Danh sách danh mục</div>
     
-      <a href="category/add">thêm danh mục</a>
+      <Link to="category/add">thêm danh mục</Link>
       
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -80,8 +84,9 @@ const CategorytList = () => {
                 <th className="px-6 py-4">{index + 1}</th>
 
                 <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  {category.name}
+                  {category.category}
                 </th>
+                <th>{category.status}</th>
 
                 <th className="px-6 py-4">
                   
@@ -102,6 +107,7 @@ const CategorytList = () => {
           
         </table>
         
+      </div>
       </div>
     </>
   );
