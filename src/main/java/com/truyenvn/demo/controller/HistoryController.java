@@ -2,6 +2,7 @@ package com.truyenvn.demo.controller;
 
 import com.truyenvn.demo.entity.Follow;
 import com.truyenvn.demo.service.impl.FollowServiceImpl;
+import com.truyenvn.demo.service.impl.HistoryServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,30 +19,20 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/follow")
+@RequestMapping("/api/v1/history")
 @RequiredArgsConstructor
-public class FollowController {
+public class HistoryController {
 
-    private final FollowServiceImpl service;
+    private final HistoryServiceImpl service;
 
     @GetMapping("getAll")
     private ResponseEntity getAllComicFollow(@RequestParam(defaultValue = "0") Integer page) {
-        return new ResponseEntity<>(service.getAllComicFollow(page), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllHistory(page), HttpStatus.OK);
     }
 
-    @PostMapping("follow-comic")
-    private ResponseEntity followComic(@RequestBody Follow follow) {
-        return new ResponseEntity<>(service.followComic(follow), HttpStatus.OK);
-    }
-
-    @PutMapping("update-chapter-had-read")
-    private ResponseEntity updateChapterHadRead(@RequestBody Follow follow) {
-        return new ResponseEntity<>(service.updateChapterHadRead(follow), HttpStatus.OK);
-    }
-
-    @DeleteMapping("unfollow/{id}")
+    @DeleteMapping("delete-history/{id}")
     private ResponseEntity unfollow(@PathVariable UUID id) {
-        service.unfollowComic(id);
+        service.deleteHistoryById(id);
         return new ResponseEntity<>("Success",HttpStatus.OK);
     }
 }

@@ -33,6 +33,13 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
+    public Follow updateChapterHadRead(Follow follow) {
+        Follow follow1 = repository.findById(follow.getId()).orElse(null);
+        follow1.setChapterReaded(follow.getChapterReaded());
+        return repository.save(follow1);
+    }
+
+    @Override
     public void unfollowComic(UUID id) {
         repository.deleteById(id);
     }
