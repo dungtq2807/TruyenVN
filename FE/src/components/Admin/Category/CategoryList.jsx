@@ -55,7 +55,7 @@ const CategorytList = () => {
     },
   });
   const getStatusLabel = (status) => {
-    return status === 1 ? "Hiện" : status === 2 ? "Ẩn" : "Không xác định";
+    return status === 1 ? "Hiện" : status === 0? "Ẩn" : "Không xác định";
   };
   return (
     <>

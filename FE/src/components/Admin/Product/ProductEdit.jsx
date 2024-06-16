@@ -35,10 +35,11 @@ const ProductEdit = () => {
       formData.append("id", id);
       formData.append("name", product.name);
       formData.append("file", product.image[0]);
+      formData.append("status", product.status);
       formData.append("description", product.description);
 
-      const { data } = await axiosInstance.post(
-        `/api/v1/comic_detail/post-comic`,
+      const { data } = await axiosInstance.put(
+        `/api/v1/comic_detail/update-comic`,
         formData,
         {
           headers: {
@@ -109,7 +110,7 @@ const ProductEdit = () => {
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              {...register("image", { required: "Ảnh sản phẩm không được bỏ trống" })}
+              {...register("image")}
               type="file"
               onChange={handleImageChange} // Handle file input change
             />
@@ -122,6 +123,7 @@ const ProductEdit = () => {
              src={imagePreview}
              alt="Preview"
              className="mt-2 max-w-xs max-h-48"
+             
            /></div>
             )}
 
@@ -129,7 +131,7 @@ const ProductEdit = () => {
             <h1>Ảnh Cũ</h1>
             <img src={`http://localhost:8080/img/${id}`} alt="" />
             </div>
-            {errors?.image && <span className="text-red-500">{errors?.image.message}</span>}
+            
           </div>
 
           <div>
