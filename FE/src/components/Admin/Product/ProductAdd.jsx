@@ -1,58 +1,52 @@
-import { useMutation} from "@tanstack/react-query";
-import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import Joi from "joi";
-import { joiResolver } from "@hookform/resolvers/joi";
-const productChema = Joi.object({
-  name: Joi.string().required().min(3),
-  price: Joi.number().required().min(0).positive(),
-  image: Joi.string(),
-  description: Joi.string(),
-  stock:Joi.number()
-});
+import axiosInstance from "../../conf/axiosInstance";
+
 const ProductAdd = () => {
-  // const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: joiResolver(productChema),
+  const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       name: "",
-      price: "",
       image: "",
       description: "",
-      stock: "",
     },
   });
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: async (product) => {
-      const { data } = await axios.post(
-        `http://localhost:3000/products`,
-        product
+      const formData = new FormData();
+      formData.append("name", product.name);
+      formData.append("file", product.image[0]); // Use `file` as the key to match the backend
+      formData.append("description", product.description);
+
+      const { data } = await axiosInstance.post(
+        `/api/v1/comic_detail/post-comic`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       return data;
     },
     onSuccess: () => {
-     
       toast.success("Sản phẩm đã được thêm thành công!");
       navigate("/admin/product");
     },
     onError: () => {
-     
       toast.error("Sản phẩm không được thêm");
-      navigate("/admin/product");
+      navigate("/admin/product/add");
     },
   });
-  const onSubmit = (data) => { 
 
+  const onSubmit = (data) => {
+    console.log(data)
     mutate(data);
   };
+
   return (
     <>
       <div>ProductAdd</div>
@@ -74,45 +68,22 @@ const ProductAdd = () => {
                 </label>
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                  {...register("name", { required: true, minLength: 3 })}
+                  {...register("name", { required: "Tên sản phẩm không được bỏ trống", minLength: { value: 3, message: "Tên sản phẩm phải có ít nhất 3 ký tự" } })}
                   type="text"
                 />
-
-                {errors?.name && <span>{errors?.name?.message}</span>}
+                {errors?.name && <span className="text-red-500">{errors?.name?.message}</span>}
               </div>
 
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Giá Sản Phẩm
-                </label>
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                  {...register("price", { required: true })}
-                  type="number"
-                />
-                    {errors?.price && <span>{errors?.price?.message}</span>}
-              </div>
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">
                   Ảnh Sản Phẩm
                 </label>
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                  {...register("image")}
-                  type="text"
+                  {...register("image", { required: "Ảnh sản phẩm không được bỏ trống" })}
+                  type="file"
                 />
-                    {errors?.image && <span>{errors?.image?.message}</span>}
-              </div>
-
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Số Lượng
-                </label>
-                <input
-                  className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                  {...register("stock", { required: true })}
-                />
-                    {errors?.stock && <span>{errors?.stock?.message}</span>}
+                {errors?.image && <span className="text-red-500">{errors?.image?.message}</span>}
               </div>
 
               <div>
@@ -122,12 +93,14 @@ const ProductAdd = () => {
                 <textarea
                   cols="30"
                   rows="10"
-                  className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                   {...register("description")}
                 ></textarea>
               </div>
 
-              <button>{isPending ? "Đang Thêm..." : "Thêm"}</button>
+              <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                {isLoading ? "Đang Thêm..." : "Thêm"}
+              </button>
             </form>
           </div>
         </div>

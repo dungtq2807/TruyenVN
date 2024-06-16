@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
+import axiosInstance from "../../conf/axiosInstance";
 const ProductList = () => {
   const queryClient = useQueryClient();
 
@@ -8,7 +9,8 @@ const ProductList = () => {
     queryKey: ["PRODUCT"], //từ khóa truy vấn để xác định loại dự liệu cần lấy
     queryFn: async () => {
       //Hàm queryFn thực hiện yêu cầu GET để lấy dữ liệu từ URL cụ thể
-      const { data } = await axios.get(`http://localhost:3000/products`);
+      const { data } = await axiosInstance.get(`/api/v1/comic_detail/getAll`);
+      console.log(data)
       return data;
     },
   });
@@ -67,37 +69,34 @@ const ProductList = () => {
                 Tên Sản Phẩm
               </td>
               <td scope="col" className="px-6 py-3">
-                Giá Sản Phẩm
+                Status
               </td>
               <td scope="col" className="px-6 py-3">
-                Số Lượng
-              </td>
-              <td scope="col" className="px-6 py-3">
-                action
-              </td>
+              Action
+            </td>
             </tr>
           </thead>
           <tbody>
             {data?.map((product, index) => (
               <tr
-                key={product.id}
+                key={product.comic.id}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
                 <th className="px-6 py-4">{index + 1}</th>
                 <th className="px-6 py-4">
                   <img
-                    src={product.image}
+                    src={product.imageUrl}
                     width={100}
                     className=" rounded-lg"
                     alt=""
                   />
                 </th>
                 <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  {product.name}
+                  {product.comic.name}
                 </th>
-                <th className="px-6 py-4">{product.price}</th>
+                <th className="px-6 py-4">{product.comic.status}</th>
 
-                <th className="px-6 py-4">{product.stock}</th>
+               
                 <th className="px-6 py-4">
                   <div className="dropdown dropdown-hover">
                     <div tabIndex={0} role="button" className="btn m-1">
