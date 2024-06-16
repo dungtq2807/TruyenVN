@@ -6,7 +6,7 @@ import HomePage from "./components/Page/HomePage";
 import { Toaster } from "sonner";
 import ProductList from "./components/Admin/Product/ProductList";
 import ProductAdd from "./components/Admin/Product/ProductAdd";
-import ProductEdit from "./components/Admin/Product/ProductEdit";
+
 import LayOutHome from "./components/LayOut/LayOutHomePage";
 
 import LayOutAdmin from "./components/LayOut/LayOutAdmin";
@@ -15,6 +15,7 @@ import CategoryAdd from "./components/Admin/Category/CategoryAdd";
 import CategoryEdit from "./components/Admin/Category/CategoryEdit";
 import SignIn from "./components/Auth/SignIn";
 import SignUp from "./components/Auth/SignUp";
+import ProductEdit from "./components/Admin/Product/ProductEdit";
 
 function App() {
   return (

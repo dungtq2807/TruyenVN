@@ -21,7 +21,7 @@ const CategoryEdit = () => {
     },
   });
   useQuery({
-    queryKey: ["CAtEGORY_DETAIL", id],
+    queryKey: ["CATEGORY_DETAIL", id],
     queryFn: async () => {
       const { data } = await axiosInstance.get(
         `/api/v1/category/get-one-category/${id}`
