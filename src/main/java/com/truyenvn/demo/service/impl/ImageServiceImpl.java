@@ -2,8 +2,13 @@ package com.truyenvn.demo.service.impl;
 
 import com.truyenvn.demo.dto.ImageResponse;
 import com.truyenvn.demo.entity.Chapter;
+import com.truyenvn.demo.entity.Comic;
+import com.truyenvn.demo.entity.History;
 import com.truyenvn.demo.entity.Image;
 import com.truyenvn.demo.entity.User;
+import com.truyenvn.demo.repository.ChapterRepository;
+import com.truyenvn.demo.repository.ComicRepository;
+import com.truyenvn.demo.repository.HistoryRepository;
 import com.truyenvn.demo.repository.ImageRepository;
 import com.truyenvn.demo.service.ImageService;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +27,17 @@ import java.util.UUID;
 public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository repository;
+    private final HistoryRepository historyRepository;
+    private final ComicRepository comicRepository;
+    private final ChapterRepository chapterRepository;
+
 
     @Override
     public List<ImageResponse> findAllImageByIdChapter(UUID id) {
         List<Image> images = repository.findAllImageByIdChapter(id);
         List<ImageResponse> imageResponses = new ArrayList<>();
+        Chapter chapter = chapterRepository.findById(id).orElse(null);
+        Comic comic = comicRepository.findById(chapter.getComic().getId()).orElse(null);
 
         for (Image image : images) {
             ImageResponse imageResponse = new ImageResponse();
@@ -40,6 +51,24 @@ public class ImageServiceImpl implements ImageService {
             imageResponses.add(imageResponse);
         }
 
+        History history = new History();
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        history.setUser(user);
+        history.setComic(comic);
+        history.setChapterReaded(chapter.getName());
+        List<History> list = historyRepository.findAll();
+        boolean check = false;
+        for (History hst : list) {
+            if (hst.getComic().equals(comic)
+                    && hst.getUser().equals(user)
+                    && hst.getChapterReaded().equalsIgnoreCase(chapter.getName())) {
+                check = true;
+            }
+        }
+        if(!check){
+            historyRepository.save(history);
+        }
         return imageResponses;
     }
 

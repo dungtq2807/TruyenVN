@@ -11,5 +11,7 @@ public interface FollowService {
 
     Follow followComic(Follow follow);
 
+    Follow updateChapterHadRead(Follow follow);
+
     void unfollowComic(UUID id);
 }
