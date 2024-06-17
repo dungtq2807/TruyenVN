@@ -12,7 +12,7 @@ const ProductOriginals = () => {
         },
       });
     
-      const lengthProduct = data?.slice(6, 10);
+      const lengthProduct = data?.slice(6, 11);
     return (
     <div>
     <div>

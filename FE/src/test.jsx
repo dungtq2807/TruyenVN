@@ -13,7 +13,7 @@ const Test = () => {
         },
       });
     
-      const lengthProduct = data?.slice(0,6);
+      const lengthProduct = data?.slice();
   return (
     <div className=''>
       <Test1 products={lengthProduct}/>

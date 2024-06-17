@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // eslint-disable-next-line react/prop-types
-const Test1 = ({ products }) => {
+const ProductListWithPagination = ({ products }) => {
   const itemsPerPage = 6; // Number of items to display per page (2 columns x 3 rows)
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -86,4 +86,4 @@ const Test1 = ({ products }) => {
   );
 };
 
-export default Test1;
+export default ProductListWithPagination;
