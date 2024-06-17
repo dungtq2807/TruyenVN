@@ -16,6 +16,7 @@ import CategoryEdit from "./components/Admin/Category/CategoryEdit";
 import SignIn from "./components/Auth/SignIn";
 import SignUp from "./components/Auth/SignUp";
 import ProductEdit from "./components/Admin/Product/ProductEdit";
+import Test from "./test";
 
 function App() {
   return (
@@ -30,7 +31,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LayOutHome/>}>
           <Route index element={<HomePage />} />
-          
+          <Route path="/test" element={<Test />}/>
           <Route path="signin" element={<SignIn />} />
           <Route path="signup" element={<SignUp />} />
         </Route>

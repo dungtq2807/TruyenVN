@@ -62,7 +62,7 @@ const CategorytList = () => {
       <div>
         <div>Danh sách danh mục</div>
 
-        <Link to="category/add">thêm danh mục</Link>
+        <Link to="/admin/category/add">thêm danh mục</Link>
 
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
