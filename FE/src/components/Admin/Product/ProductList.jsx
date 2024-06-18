@@ -53,6 +53,9 @@ const ProductList = () => {
       }
     },
   });
+  const getStatusLabel = (status) => {
+    return status === 1 ? "Hiện" : status === 0 ? "Ẩn" : "Không xác định";
+  };
   return (
     <>
       <div>ProductList</div>
@@ -94,7 +97,7 @@ const ProductList = () => {
                 <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {product.comic.name}
                 </th>
-                <th className="px-6 py-4">{product.comic.status}</th>
+                <th className="px-6 py-4">{getStatusLabel(product.comic.status)}</th>
 
                
                 <th className="px-6 py-4">
@@ -116,12 +119,12 @@ const ProductList = () => {
                     >
                       <li>
                         <button className="" onClick={() => mutate(product.id)}>
-                          delete
+                          Ẩn 
                         </button>
                       </li>
                       <li>
                         {" "}
-                        <a href={`/admin/product/edit/${product.id}`}>edit</a>
+                        <a href={`/admin/product/edit/${product.comic.id}`}>edit</a>
                       </li>
                     </ul>
                   </div>

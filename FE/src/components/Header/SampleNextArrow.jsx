@@ -1,15 +1,33 @@
-
-
 // eslint-disable-next-line react/prop-types
 const SampleNextArrow = ({ className, style, onClick }) => {
-  return (
-    
-      <div  className={className}
-      style={{ ...style, display: "block", background: "red" }}
-      onClick={onClick}>
-      </div>
- 
-  )
-}
+  const arrowStyle = {
+    ...style,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent black
+    width: "40px",
+    height: "40px",
+    borderRadius: "50%", // Circular shape
+    cursor: "pointer",
+    zIndex: "2", // Ensure it's above slider content
+    transition: "background-color 0.3s ease",
+  };
 
-export default SampleNextArrow
+ 
+  const handleClick = () => {
+    onClick(); // Call onClick prop passed from Slider component
+  };
+
+  return (
+    <div
+      className={`sample-arrow next-arrow ${className} absolute right-4 bottom-4`}
+      style={arrowStyle}
+      onClick={handleClick}
+    >
+    
+    </div>
+  );
+};
+
+export default SampleNextArrow;

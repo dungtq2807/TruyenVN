@@ -1,8 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import axiosInstance from "../conf/axiosInstance";
-import ProductBanner from "./ProductBanner";
 
-const Banner = () => {
+import Test1 from './test1'
+import { useQuery } from '@tanstack/react-query';
+import axiosInstance from './components/conf/axiosInstance';
+
+const Test = () => {
     const { data } = useQuery({
         queryKey: ["PRODUCT"],
         queryFn: async () => {
@@ -12,12 +13,12 @@ const Banner = () => {
         },
       });
     
-      const lengthProduct = data?.slice(0,6);
+      const lengthProduct = data?.slice();
   return (
     <div className=''>
-      <ProductBanner products={lengthProduct}/>
+      <Test1 products={lengthProduct}/>
     </div>
   )
 }
 
-export default Banner
+export default Test

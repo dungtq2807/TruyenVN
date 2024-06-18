@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import axiosInstance from '../conf/axiosInstance';
+import axiosInstance from '../../conf/axiosInstance';
 
-const Product = () => {
+const Category = () => {
     const { data } = useQuery({
         queryKey: ["CATEGORY"], //từ khóa truy vấn để xác định loại dự liệu cần lấy
         queryFn: async () => {
@@ -15,8 +15,7 @@ const Product = () => {
     return (
     
         <div>
-        {data?.map((item) => (
-          item.status === 1 ? (
+        {data?.map((item) => (item.status === 1 ? (
             <div key={item.id} className="p-4 border-b">
               <div className="text-lg font-bold">{item.category}</div>
             </div>
@@ -26,4 +25,4 @@ const Product = () => {
   )
 }
 
-export default Product
+export default Category
