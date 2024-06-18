@@ -56,15 +56,15 @@ const ProductImage = ({ products }) => {
                 <h2 className="text-lg font-semibold">{item.comic.name}</h2>
                 <p className="text-sm mb-2">Tác giả: {item.comic.author}</p>
                 <p className="text-sm mb-2">
-                  {truncateDescription(item.comic.description, 20)}
+                  {truncateDescription(item?.comic?.description, 20)}
                 </p>
                 <div className="flex flex-wrap">
-                  {item.listCategory?.map((category) => (
+                  {item?.listCategory?.map((category) => (
                     <span
-                      key={category}
+                      key={category?.category?.id}
                       className="inline-block bg-gray-200 text-gray-800 text-xs px-2 rounded-full m-1"
                     >
-                      {category}
+                      {category?.category?.category}
                     </span>
                   ))}
                 </div>

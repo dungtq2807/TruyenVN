@@ -17,6 +17,11 @@ import SignIn from "./components/Auth/SignIn";
 import SignUp from "./components/Auth/SignUp";
 import ProductEdit from "./components/Admin/Product/ProductEdit";
 import Test from "./test";
+import ChapterList from "./components/Admin/Chapter/ChapterList";
+import ChapterAdd from "./components/Admin/Chapter/ChapterAdd";
+import ChapterEdit from "./components/Admin/Chapter/ChapterEdit";
+import ProductWithCategory from "./components/Admin/Product/ProductWithCategory";
+import ProductUpdateCategory from "./components/Admin/Product/ProductUpdateCategory";
 
 function App() {
   return (
@@ -31,7 +36,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LayOutHome/>}>
           <Route index element={<HomePage />} />
-          <Route path="/test" element={<Test />}/>
+          <Route path="/test/:id" element={<Test />}/>
           <Route path="signin" element={<SignIn />} />
           <Route path="signup" element={<SignUp />} />
         </Route>
@@ -45,12 +50,19 @@ function App() {
           <Route index element={<ProductList/>}/>
           <Route path="add" element={<ProductAdd/>}/>
           <Route path="edit/:id" element={<ProductEdit/>}/>
+          <Route path="addCate" element={<ProductWithCategory/>}/>
+          <Route path="updateCate/:id" element={<ProductUpdateCategory/>}/>
         </Route>
         <Route path="category">
           <Route index element={<CategorytList/>}/>
           <Route path="add" element={<CategoryAdd/>}/>
           <Route path="edit/:id" element={<CategoryEdit/>}/>
         </Route>
+        <Route path="chapter">
+        <Route index element={<ChapterList/>}/>
+        <Route path="add" element={<ChapterAdd/>}/>
+        <Route path="edit/:id" element={<ChapterEdit/>}/>
+      </Route>
         </Route>
       </Routes>
     </>

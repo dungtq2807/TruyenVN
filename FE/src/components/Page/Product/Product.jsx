@@ -35,12 +35,12 @@ const Product = ({ products }) => {
                 {truncateDescription(item.comic.description, 20)}
               </p>
               <div className="flex flex-wrap">
-                {item.listCategory?.map((category) => (
+                {item?.listCategory?.map((category) => (
                   <span
-                    key={category}
+                    key={category?.category?.id}
                     className="inline-block bg-gray-200 text-gray-800 text-xs px-2 rounded-full m-1"
                   >
-                    {category}
+                    {category?.category?.category}
                   </span>
                 ))}
               </div>

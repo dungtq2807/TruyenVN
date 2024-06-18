@@ -1,9 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+
 import axiosInstance from "../../conf/axiosInstance";
+import { Link } from "react-router-dom";
 const ProductList = () => {
-  const queryClient = useQueryClient();
+
 
   const { data } = useQuery({
     queryKey: ["PRODUCT"], //từ khóa truy vấn để xác định loại dự liệu cần lấy
@@ -15,51 +15,19 @@ const ProductList = () => {
     },
   });
 
+  
+
   // Sử dụng useMutation để thực hiện mutation
-  const { mutate } = useMutation({
-    // mutationFn là hàm bất đồng bộ thực hiện việc xóa sản phẩm
-    mutationFn: async (id) => {
-      // Hiển thị hộp thoại xác nhận từ người dùng bằng cửa sổ confirm
-      const isConfirmed = window.confirm(
-        "Bạn có chắc chắn muốn xóa sản phẩm này không?"
-      );
-      if (isConfirmed) {
-        // Nếu người dùng xác nhận, gửi yêu cầu DELETE đến URL cụ thể bằng Axios
-        await axios.delete(`http://localhost:3000/products/${id}`);
-        // Hiển thị toast thông báo thành công
-        toast.success("Sản phẩm đã được xóa thành công");
-      } else {
-        // Nếu người dùng hủy, hiển thị toast thông báo hủy bỏ và ném một lỗi để ngăn việc gọi onSuccess
-        toast.info("Hủy bỏ việc xóa sản phẩm");
-        throw new Error("Deletion cancelled");
-      }
-    },
-    // Hành động được thực hiện khi mutation thành công
-    onSuccess: () => {
-      // Vô hiệu hóa truy vấn cụ thể trong cache để cập nhật lại dữ liệu
-      queryClient.invalidateQueries({
-        queryKey: ["PRODUCT"],
-      });
-    },
-    // Hành động được thực hiện khi có lỗi trong quá trình mutation
-    onError: (error) => {
-      // Kiểm tra nếu lỗi không phải do việc hủy bỏ, hiển thị toast thông báo lỗi
-      if (error.message !== "Deletion cancelled") {
-        // Vô hiệu hóa truy vấn cụ thể trong cache và hiển thị toast thông báo lỗi
-        queryClient.invalidateQueries({
-          queryKey: ["PRODUCT"],
-        });
-        toast.error("Không thể xóa sản phẩm");
-      }
-    },
-  });
+ 
   const getStatusLabel = (status) => {
     return status === 1 ? "Hiện" : status === 0 ? "Ẩn" : "Không xác định";
   };
   return (
     <>
       <div>ProductList</div>
-      <a href="product/add">thêm sản phẩm</a>
+      <Link to="/admin/product/add">thêm sản phẩm</Link>
+      <Link to="/admin/product/addCate">chọn danh mục</Link>
+      
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -72,6 +40,9 @@ const ProductList = () => {
                 Tên Sản Phẩm
               </td>
               <td scope="col" className="px-6 py-3">
+                Danh mục
+              </td>
+              <td scope="col" className="px-6 py-3">
                 Status
               </td>
               <td scope="col" className="px-6 py-3">
@@ -82,7 +53,7 @@ const ProductList = () => {
           <tbody>
             {data?.map((product, index) => (
               <tr
-                key={product.comic.id}
+                key={product?.comic?.id}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
                 <th className="px-6 py-4">{index + 1}</th>
@@ -97,7 +68,10 @@ const ProductList = () => {
                 <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {product.comic.name}
                 </th>
-                <th className="px-6 py-4">{getStatusLabel(product.comic.status)}</th>
+                <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                {product?.listCategory.map((category) => category?.category?.category).join(", ")}
+              </th>
+                <th className="px-6 py-4">{getStatusLabel(product?.comic?.status)}</th>
 
                
                 <th className="px-6 py-4">
@@ -118,13 +92,11 @@ const ProductList = () => {
                       className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
                     >
                       <li>
-                        <button className="" onClick={() => mutate(product.id)}>
-                          Ẩn 
-                        </button>
+                      <Link to={`/admin/product/updateCate/${product.comic.id}`}>edit danh mục</Link>
                       </li>
                       <li>
                         {" "}
-                        <a href={`/admin/product/edit/${product.comic.id}`}>edit</a>
+                        <Link to={`/admin/product/edit/${product.comic.id}`}>edit</Link>
                       </li>
                     </ul>
                   </div>
