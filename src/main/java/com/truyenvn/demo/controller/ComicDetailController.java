@@ -67,6 +67,11 @@ public class ComicDetailController {
         }
     }
 
+    @GetMapping("get-one-comic-detail/{id}")
+    public ResponseEntity<?> getOneComicDetail(@PathVariable UUID id) {
+        return new ResponseEntity<>(comicDetailService.findOneByIdComicDetail(id), HttpStatus.OK);
+    }
+
     @PostMapping("post-comic")
     private ResponseEntity postComic(@RequestParam String name,
                                      @RequestParam String description,

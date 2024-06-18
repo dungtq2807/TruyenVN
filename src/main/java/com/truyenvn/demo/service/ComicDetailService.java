@@ -15,6 +15,8 @@ public interface ComicDetailService {
 
     Comic findOneByIdComic(UUID id);
 
+    ComicDetail findOneByIdComicDetail(UUID id);
+
     List<ComicDetail> findByIdComic(UUID id);
 
     List<ComicDetail> addComicDetail(List<ComicDetail> comicDetail);
