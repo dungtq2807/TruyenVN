@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +22,11 @@ public class ChapterServiceImpl implements ChapterService {
     @Override
     public List<Chapter> findAllChapter() {
         return repository.findAll();
+    }
+
+    @Override
+    public Chapter getOneChapter(UUID id) {
+        return repository.findById(id).orElse(null);
     }
 
     @Override
