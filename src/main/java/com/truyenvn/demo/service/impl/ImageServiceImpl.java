@@ -50,25 +50,20 @@ public class ImageServiceImpl implements ImageService {
             imageResponse.setId(image.getId());
             imageResponses.add(imageResponse);
         }
-
-        History history = new History();
-
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        history.setUser(user);
-        history.setComic(comic);
+        History history = historyRepository.findByComicAndUser(comic, user)
+                .orElseGet(() -> {
+                    History newHistory = new History();
+                    newHistory.setComic(comic);
+                    newHistory.setUser(user);
+                    return newHistory;
+                });
+
+        // Cập nhật tên chương đọc
         history.setChapterReaded(chapter.getName());
-        List<History> list = historyRepository.findAll();
-        boolean check = false;
-        for (History hst : list) {
-            if (hst.getComic().equals(comic)
-                    && hst.getUser().equals(user)
-                    && hst.getChapterReaded().equalsIgnoreCase(chapter.getName())) {
-                check = true;
-            }
-        }
-        if(!check){
-            historyRepository.save(history);
-        }
+
+        // Lưu vào cơ sở dữ liệu
+        historyRepository.save(history);
         return imageResponses;
     }
 

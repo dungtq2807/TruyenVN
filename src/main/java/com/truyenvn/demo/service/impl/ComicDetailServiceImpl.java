@@ -45,6 +45,11 @@ public class ComicDetailServiceImpl implements ComicDetailService {
     }
 
     @Override
+    public ComicDetail findOneByIdComicDetail(UUID id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    @Override
     public List<ComicDetail> findByIdComic(UUID id) {
         return repository.findAllByIdComic(id);
     }
