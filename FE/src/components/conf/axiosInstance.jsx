@@ -19,7 +19,8 @@ axiosInstance.interceptors.request.use(
 );
 
 // Hàm lưu token và role vào localStorage
-export const storeTokenAndRole = (token, role) => {
+export const storeTokenAndRole = (id, token, role) => {
+  localStorage.setItem('id', id);
   localStorage.setItem('token', token);
   localStorage.setItem('role', role);
 };
@@ -28,6 +29,7 @@ export const storeTokenAndRole = (token, role) => {
 export const clearTokenAndRole = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('role');
+  localStorage.removeItem('id');
 };
 
 // Hàm lấy role từ localStorage

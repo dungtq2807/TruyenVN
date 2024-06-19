@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import axiosInstance, {  storeTokenAndRole } from "../conf/axiosInstance";
+import axiosInstance,{ storeTokenAndRole }  from "../conf/axiosInstance";
 import { toast } from "sonner";
 
 
@@ -31,7 +31,7 @@ const SignIn = () => {
   const { mutate, isLoading } = useMutation({
     mutationFn: async (signinData) => {
       const { data } = await axiosInstance.post('/login', signinData);
-      storeTokenAndRole(data.token, data.data.role);
+      storeTokenAndRole(data.data.id,data.token, data.data.role);
       return data;
     },
     onSuccess: () => {

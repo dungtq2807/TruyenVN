@@ -19,15 +19,18 @@ import ProductUpdateCategory from "./components/Admin/Product/ProductUpdateCateg
 import SignIn from "./components/Auth/SignIn";
 import SignUp from "./components/Auth/SignUp";
 import Test from "./test";
-import UserProfile from "./components/Page/UserProfile/UserProfile";
 import NotFound from "./components/Page/NotFound/NotFound";
+import UserPage from "./components/Page/UserProfile/UserPage";
+
+import ChangePassword from "./components/Page/UserProfile/ChangePassword";
+import UserEdit from "./components/Page/UserProfile/UserEdit";
 
 function App() {
   const { isLoggedIn, role, updateRole } = useAuth(); // Lấy trạng thái đăng nhập, vai trò và hàm cập nhật vai trò từ AuthContext
 
   useEffect(() => {
     // Lấy role từ localStorage khi component được render
-    const storedRole = localStorage.getItem('role');
+    const storedRole = localStorage.getItem("role");
     if (storedRole) {
       updateRole(storedRole); // Cập nhật vai trò từ localStorage
     }
@@ -49,10 +52,23 @@ function App() {
           <Route path="test" element={<Test />} />
           <Route path="signin" element={<SignIn />} />
           <Route path="signup" element={<SignUp />} />
+            <Route path="profile" element={<UserPage />}>
+              <Route path="edit/:id" element={<UserEdit />} />
+              <Route path="changepassword" element={<ChangePassword />} />
+            </Route>
         </Route>
 
         {/* Route cho trang admin */}
-        <Route path="/admin" element={isLoggedIn && role === "ADMIN" ? <LayOutAdmin /> : <Navigate to="/signin" />}>
+        <Route
+          path="/admin"
+          element={
+            isLoggedIn && role === "ADMIN" ? (
+              <LayOutAdmin />
+            ) : (
+              <Navigate to="/signin" />
+            )
+          }
+        >
           <Route path="product">
             <Route index element={<ProductList />} />
             <Route path="add" element={<ProductAdd />} />
@@ -73,7 +89,6 @@ function App() {
         </Route>
 
         {/* Route cho UserProfile */}
-        <Route path="user-profile" element={<UserProfile />} />
 
         {/* Điều hướng mặc định */}
         <Route path="*" element={<NotFound />} />

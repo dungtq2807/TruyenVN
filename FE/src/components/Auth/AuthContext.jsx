@@ -4,26 +4,45 @@ const AuthContext = createContext();
 
 // eslint-disable-next-line react/prop-types
 export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Trạng thái đăng nhập
-  const [role, setRole] = useState(null); // Vai trò người dùng
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Authentication state
+  const [id, setId] = useState(null); // User id
+  const [role, setRole] = useState(null); // User role
 
   const login = () => {
-    setIsLoggedIn(true); // Đánh dấu đã đăng nhập
+    setIsLoggedIn(true); // Mark as logged in
   };
 
   const logout = () => {
-    setIsLoggedIn(false); // Đánh dấu đã đăng xuất
-    setRole(null); // Đặt lại vai trò khi đăng xuất
-    localStorage.removeItem('role'); // Xóa vai trò khỏi localStorage
+    setIsLoggedIn(false); // Mark as logged out
+    setId(null); // Reset id
+    setRole(null); // Reset role
+    localStorage.removeItem('id'); // Clear id from localStorage
+    localStorage.removeItem('role'); // Clear role from localStorage
+    localStorage.removeItem('token'); // Clear token from localStorage
   };
 
   const updateRole = (newRole) => {
-    setRole(newRole); // Cập nhật vai trò mới
-    localStorage.setItem('role', newRole); // Lưu vai trò vào localStorage
+    setRole(newRole); // Update role state
+    localStorage.setItem('role', newRole); // Store role in localStorage
+  };
+
+  const storeTokenAndRole = (id, token, role) => {
+    setId(id); // Set user id
+    localStorage.setItem('id', id); // Store id in localStorage
+    localStorage.setItem('token', token); // Store token in localStorage
+    localStorage.setItem('role', role); // Store role in localStorage
+  };
+
+  const clearTokenAndRole = () => {
+    setId(null); // Reset id
+    setRole(null); // Reset role
+    localStorage.removeItem('id'); // Clear id from localStorage
+    localStorage.removeItem('role'); // Clear role from localStorage
+    localStorage.removeItem('token'); // Clear token from localStorage
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout, role, updateRole }}>
+    <AuthContext.Provider value={{ isLoggedIn, login, logout, role, updateRole, storeTokenAndRole, clearTokenAndRole, id }}>
       {children}
     </AuthContext.Provider>
   );

@@ -8,9 +8,9 @@ const Logout = () => {
   const handleLogout = () => {
     clearTokenAndRole(); // Xóa token từ localStorage
     // Đợi một khoảng thời gian ngắn trước khi chuyển hướng để đảm bảo rằng các thay đổi đã được lưu
-    // setTimeout(() => {
-    //   window.location.reload(); // Tải lại trang sau khi đăng xuất
-    // }, 100); // Thời gian chờ 100ms để đảm bảo rằng `clearToken` đã hoàn thành
+    setTimeout(() => {
+      window.location.reload(); // Tải lại trang sau khi đăng xuất
+    }, 100); // Thời gian chờ 100ms để đảm bảo rằng `clearToken` đã hoàn thành
 
     // Hoặc sử dụng navigate để chuyển hướng đến trang khác sau đó reload
     navigate('/', { replace: true });
