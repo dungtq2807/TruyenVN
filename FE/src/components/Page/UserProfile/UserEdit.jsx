@@ -56,7 +56,7 @@ const UserEdit = () => {
         {/* User Info Header */}
         <div className="bg-gray-200 text-center py-4 rounded-t-md">
           <img
-            src={data?.avatar || "https://randomuser.me/api/portraits/men/32.jpg"}
+            src={data?.avatar || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"}
             alt="User Avatar"
             className="rounded-full w-24 h-24 border-4 border-white mx-auto -mt-12"
           />
