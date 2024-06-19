@@ -30,23 +30,23 @@ const ProductImage = ({ products }) => {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-6">
       {displayedProducts?.map((item) =>
-        item.comic.status === 1 ? (
+        item?.comic?.status === 1 ? (
           <Link
-            key={item.comic.id}
-            to={`/product/${item.comic.id}`}
+            key={item?.comic?.id}
+            to={`/product/${item?.comic?.id}`}
             className="bg-white shadow-md rounded-lg h-[400px] overflow-hidden transition-transform duration-300 transform hover:scale-105 product-item relative"
             style={{ position: "relative", overflow: "hidden" }}
-            onMouseEnter={() => handleMouseEnter(item.comic.id)}
+            onMouseEnter={() => handleMouseEnter(item?.comic?.id)}
             onMouseLeave={handleMouseLeave}
           >
             <img
-              src={item.imageUrl}
-              alt={item.comic.name}
+              src={item?.imageUrl}
+              alt={item?.comic?.name}
               className="w-full h-full object-cover object-center"
             />
             <div
               className={`overlay absolute top-0 left-0 w-full h-full bg-black opacity-0 transition-opacity duration-300 ${
-                hoveredProductId === item.comic.id ? "opacity-50" : "opacity-0"
+                hoveredProductId === item?.comic.id ? "opacity-50" : "opacity-0"
               }`}
             >
               {/* Overlay content */}
