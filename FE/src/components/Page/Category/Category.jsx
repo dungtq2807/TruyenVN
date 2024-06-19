@@ -2,27 +2,31 @@ import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '../../conf/axiosInstance';
 
 const Category = () => {
-    const { data } = useQuery({
-        queryKey: ["CATEGORY"], //từ khóa truy vấn để xác định loại dự liệu cần lấy
-        queryFn: async () => {
-          //Hàm queryFn thực hiện yêu cầu GET để lấy dữ liệu từ URL cụ thể
-          const { data } = await axiosInstance.get(`/api/v1/category/getAll`);
-            console.log(data)
-          return data;
-        },
-      });
-    
-    return (
-    
-        <div>
-        {data?.map((item) => (item.status === 1 ? (
-            <div key={item.id} className="p-4 border-b">
-              <div className="text-lg font-bold">{item.category}</div>
-            </div>
-          ) : null
-        ))}
-      </div>
-  )
-}
+  // Sử dụng useQuery để lấy danh sách các danh mục từ API
+  const { data } = useQuery({
+    queryKey: ["CATEGORY"],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get(`/api/v1/category/getAll`);
+      return data;
+    },
+  });
 
-export default Category
+  return (
+    <div className="relative">
+      <details className="dropdown">
+        <summary className="m-1 btn btn-ghost ">Danh Mục</summary>
+        <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+          {data?.map((item) => (
+            item.status === 1 && (
+              <li key={item.id}>
+                <a>{item.category}</a>
+              </li>
+            )
+          ))}
+        </ul>
+      </details>
+    </div>
+  );
+};
+
+export default Category;

@@ -71,8 +71,8 @@ const ProductList = () => {
                 <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                 {product?.listCategory.map((category) => category?.category?.category).join(", ")}
               </th>
-                <th className="px-6 py-4">{getStatusLabel(product?.comic?.status)}</th>
-
+                <th className="px-6 py-4">{getStatusLabel(product?.comic?.status)}
+              </th>
                
                 <th className="px-6 py-4">
                   <div className="dropdown dropdown-hover">
@@ -92,11 +92,11 @@ const ProductList = () => {
                       className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
                     >
                       <li>
-                      <Link to={`/admin/product/updateCate/${product.comic.id}`}>edit danh mục</Link>
+                      <Link to={`/admin/product/updateCate/${product?.listCategory?.map((category)=>category?.id)}`}>edit danh mục</Link>
                       </li>
                       <li>
                         {" "}
-                        <Link to={`/admin/product/edit/${product.comic.id}`}>edit</Link>
+                        <Link to={`/admin/product/edit/${product.comic.id}`}>edit truyện</Link>
                       </li>
                     </ul>
                   </div>

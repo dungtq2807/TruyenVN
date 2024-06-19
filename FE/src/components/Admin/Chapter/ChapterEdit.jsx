@@ -3,30 +3,50 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../conf/axiosInstance";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
 const ChapterEdit = () => {
-    const {id} = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
 
   // Sử dụng React Hook Form để quản lý form và validation
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
-        name: "",
-        id:id,
-        comic:""
-        // status:0||1 
-       },
-  }
-    
-  );
+      name: "",
+      id: id,
+      comic: "",
+    },
+  });
+
+  // Sử dụng useQuery để lấy chi tiết chapter
+  const { data: chapterDetail} = useQuery({
+    queryKey: ["CHAPTER_DETAIL", id],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get(`/api/v1/chapter/get-one-chapter/${id}`);
+      return data;
+    },
+  });
+
+  // Đặt lại giá trị form sau khi dữ liệu chapterDetail được tải lên
+  useEffect(() => {
+    if (chapterDetail) {
+      const formattedData = {
+        name: chapterDetail.name,
+        id: chapterDetail.id,
+        comic: chapterDetail.comic.id,
+      };
+      reset(formattedData);
+    }
+  }, [chapterDetail, reset]);
 
   // Sử dụng useQuery để lấy danh sách comic từ API
   const { data: productList, isLoading: isLoadingProducts } = useQuery({
-    queryKey: ["PRODUCT"], // Từ khóa truy vấn để xác định loại dữ liệu cần lấy
+    queryKey: ["PRODUCT"],
     queryFn: async () => {
       const { data } = await axiosInstance.get(`/api/v1/comic_detail/getAll`);
       return data;
@@ -53,16 +73,18 @@ const ChapterEdit = () => {
 
   // Xử lý khi submit form
   const onSubmit = (formData) => {
-    // Gán ID của comic được chọn vào formData
-    formData.id
-    formData.comic = { id: formData.comic }; // Lấy ID của product.comic.id từ form select
-
-    mutate(formData);
+    const updateData = {
+      id: formData.id,
+      name: formData.name,
+      comic: { id: formData.comic },
+    };
+    console.log(updateData);
+    mutate(updateData);
   };
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Thêm Chapter Mới</h2>
+      <h2 className="text-xl font-bold mb-4">Chỉnh Sửa Chapter</h2>
       <div className="flex justify-end mb-4">
         <a href="/admin/chapter">
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
@@ -70,9 +92,10 @@ const ChapterEdit = () => {
           </button>
         </a>
       </div>
-        <input type="hidden" {...register("id")} />
+        
       <div className="max-w-md">
         <form onSubmit={handleSubmit(onSubmit)}>
+          <input type="hidden" {...register("id")} />
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Tên Chapter:
@@ -90,10 +113,11 @@ const ChapterEdit = () => {
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Chọn Truyện:
             </label>
-            <select
+            <select disabled
               {...register("comic", { required: true })}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
+              <option value="">Chọn truyện</option>
               {isLoadingProducts ? (
                 <option value="">Loading...</option>
               ) : (

@@ -46,15 +46,15 @@ const ProductImage = ({ products }) => {
             />
             <div
               className={`overlay absolute top-0 left-0 w-full h-full bg-black opacity-0 transition-opacity duration-300 ${
-                hoveredProductId === item?.comic.id ? "opacity-50" : "opacity-0"
+                hoveredProductId === item?.comic?.id ? "opacity-50" : "opacity-0"
               }`}
             >
               {/* Overlay content */}
             </div>
-            {hoveredProductId === item.comic.id && (
+            {hoveredProductId === item?.comic?.id && (
               <div className="p-4 flex flex-col justify-center items-center absolute top-0 left-0 w-full h-full text-center text-white">
-                <h2 className="text-lg font-semibold">{item.comic.name}</h2>
-                <p className="text-sm mb-2">Tác giả: {item.comic.author}</p>
+                <h2 className="text-lg font-semibold">{item?.comic?.name}</h2>
+                <p className="text-sm mb-2">Tác giả: {item?.comic?.author}</p>
                 <p className="text-sm mb-2">
                   {truncateDescription(item?.comic?.description, 20)}
                 </p>

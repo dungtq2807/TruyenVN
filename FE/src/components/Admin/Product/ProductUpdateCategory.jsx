@@ -3,27 +3,37 @@ import axiosInstance from "../../conf/axiosInstance";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
 const ProductUpdateCategory = () => {
   const navigate = useNavigate();
-const {id} = useParams();
+  const { id } = useParams();
   // Sử dụng React Hook Form để quản lý form và validation
   const {
     register,
     handleSubmit,
-     reset,
+    reset,
     formState: { errors },
   } = useForm();
 
-  useQuery({
+  const { data: comicDetail } = useQuery({
     queryKey: ["PRODUCT_DETAIL", id],
     queryFn: async () => {
-      const { data } = await axiosInstance.get(`/api/v1/comic_detail/${id}`);
-      reset(data.comic);
-      console.log(data)
+      const { data } = await axiosInstance.get(`/api/v1/comic_detail/get-one-comic-detail/${id}`);
       return data;
     },
   });
+
+  useEffect(() => {
+    if (comicDetail) {
+      const formattedData = {
+        id: comicDetail.id,
+        comic: comicDetail.comic.id,
+        category: comicDetail.category.id,
+      };
+      reset(formattedData);
+    }
+  }, [comicDetail, reset]);
 
   // Sử dụng useQuery để lấy danh sách các danh mục
   const { data: CategoryList, isLoading: isLoadingCategory } = useQuery({
@@ -39,7 +49,6 @@ const {id} = useParams();
     queryKey: ["PRODUCT"], // Wrap the string "PRODUCT" in an array
     queryFn: async () => {
       const { data } = await axiosInstance.get(`/api/v1/comic_detail/getAll`);
-    //   console.log(reset(data.id))
       return data;
     },
   });
@@ -47,33 +56,31 @@ const {id} = useParams();
   // Sử dụng useMutation để thực hiện mutation khi submit form
   const { mutate, isLoading: isMutating } = useMutation({
     mutationFn: async (formData) => {
-      const { data } = await axiosInstance.post(
-        `/api/v1/comic_detail/post-comic-detail`,
+      const { data } = await axiosInstance.put(
+        `/api/v1/comic_detail/update-comic-detail`,
         formData
       );
       return data;
     },
     onSuccess: () => {
-      toast.success("Danh mục đã được thêm thành công!");
+      toast.success("Danh mục đã được sửa thành công!");
       navigate("/admin/product");
     },
     onError: () => {
-      toast.error("Thêm danh mục không thành công!");
+      toast.error("Sửa danh mục không thành công!");
     },
   });
 
   // Xử lý khi submit form
   const onSubmit = (formData) => {
     // Gán ID của comic và category được chọn vào formData
-    formData = [
-        {
-                id:{id:formData.id},
-                category: { id: formData.category },
-                comic: { id: formData.comic }
-        }
-      ];
-    console.log(formData)
-    mutate(formData);
+    const updateData = {
+      id: formData.id,
+      category: { id: formData.category },
+      comic: { id: formData.comic },
+    };
+    console.log(updateData);
+    mutate(updateData);
   };
 
   return (
@@ -87,16 +94,16 @@ const {id} = useParams();
         </a>
       </div>
 
-
       <div className="max-w-md">
         <form onSubmit={handleSubmit(onSubmit)}>
-        <input type="hidden"  {...register("id")}/>
+          <input type="hidden" {...register("id")} />
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Chọn Truyện:
             </label>
             <select
               {...register("comic", { required: true })}
+              type=""
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               <option value="">Lựa chọn</option>
@@ -104,13 +111,13 @@ const {id} = useParams();
                 <option value="">Loading...</option>
               ) : (
                 ProductList.map((product) => (
-                  <option key={product.comic.id} value={product.comic.id}>
-                    {product.comic.name}
+                  <option key={product?.comic?.id} value={product?.comic?.id}>
+                    {product?.comic?.name}
                   </option>
                 ))
               )}
             </select>
-            {errors.comic && (
+            {errors?.comic && (
               <span className="text-red-500">Bạn cần chọn truyện.</span>
             )}
           </div>
@@ -119,7 +126,7 @@ const {id} = useParams();
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Chọn danh mục:
             </label>
-            <select
+            <select disabled
               {...register("category", { required: true })}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >

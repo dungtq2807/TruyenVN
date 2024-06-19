@@ -1,52 +1,49 @@
-import { useQuery } from "@tanstack/react-query";
-import axiosInstance from "./components/conf/axiosInstance";
-import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 const Test = () => {
-  const { id } = useParams(); // Get comicId from URL parameters
+    const [image, setImage] = useState(null);
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["PRODUCT_DETAIL", id],
-    queryFn: async () => {
-      const { data } = await axiosInstance.get(`/api/v1/comic_detail/${id}`);
-      console.log(data)
-      return data; // Assuming data.comic contains the comic details
-    },
-  });
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setImage(file);
+    };
 
-  if (isLoading) {
-    return <div>Loading...</div>; // Optional: Show loading indicator while fetching data
-  }
+    const handleUpload = () => {
+        // Xử lý logic upload ảnh ở đây, ví dụ gửi dữ liệu đến API hoặc xử lý trên client-side
+        console.log('Image uploaded:', image);
+        // Reset state sau khi upload thành công (nếu cần)
+        setImage(null);
+    };
 
-  if (error) {
-    return <div>Error: {error.message}</div>; // Optional: Show error message if request fails
-  }
-
-  if (!data || !data.comic) {
-    return <div>Truyện tranh không tồn tại</div>; // Show message if comic data is empty or invalid
-  }
-
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
-        <img src={data.imageUrl} alt={data.comic.name} className="w-full h-96 object-cover object-center rounded-t-lg" />
-        <div className="p-6">
-          <h2 className="text-3xl font-semibold text-gray-800">{data.comic.name}</h2>
-          <p className="text-gray-600 text-sm mb-4">Tác giả: {data.comic.author}</p>
-          <div className="flex flex-wrap mt-4">
-          {data.listCategory?.map(category => (
-            <span key={category.category.id} className="inline-block bg-gray-200 text-gray-800 text-xs px-2 rounded-full m-1">
-              {category.category.category} {/* Assuming `name` is the property that holds the category name */}
-            </span>
-          ))}
+    return (
+        <div className="container mx-auto py-4">
+            <h1 className="text-2xl font-bold mb-4">Admin Upload Ảnh</h1>
+            <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="mb-4"
+                />
+                {image && (
+                    <div className="mb-4">
+                        <img
+                            src={URL.createObjectURL(image)}
+                            alt="Uploaded"
+                            className="w-full rounded-lg"
+                        />
+                    </div>
+                )}
+                <button
+                    onClick={handleUpload}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    disabled={!image}
+                >
+                    Upload Ảnh
+                </button>
+            </div>
         </div>
-          <p className="text-gray-700">{data.comic.description}</p>
-          
-         
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Test;

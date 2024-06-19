@@ -1,29 +1,38 @@
-import { Route, Routes } from "react-router-dom";
-
-import HomePage from "./components/Page/HomePage";
-
-
+import { Route, Routes, Navigate } from "react-router-dom";
 import { Toaster } from "sonner";
+import { useAuth } from "./components/Auth/AuthContext";
+import { useEffect } from "react"; // Thêm useEffect để lấy role từ localStorage
+import HomePage from "./components/Page/HomePage";
+import LayOutHome from "./components/LayOut/LayOutHomePage";
+import LayOutAdmin from "./components/LayOut/LayOutAdmin";
 import ProductList from "./components/Admin/Product/ProductList";
 import ProductAdd from "./components/Admin/Product/ProductAdd";
-
-import LayOutHome from "./components/LayOut/LayOutHomePage";
-
-import LayOutAdmin from "./components/LayOut/LayOutAdmin";
-import CategorytList from "./components/Admin/Category/CategoryList";
+import ProductEdit from "./components/Admin/Product/ProductEdit";
+import CategoryList from "./components/Admin/Category/CategoryList";
 import CategoryAdd from "./components/Admin/Category/CategoryAdd";
 import CategoryEdit from "./components/Admin/Category/CategoryEdit";
-import SignIn from "./components/Auth/SignIn";
-import SignUp from "./components/Auth/SignUp";
-import ProductEdit from "./components/Admin/Product/ProductEdit";
-import Test from "./test";
 import ChapterList from "./components/Admin/Chapter/ChapterList";
 import ChapterAdd from "./components/Admin/Chapter/ChapterAdd";
 import ChapterEdit from "./components/Admin/Chapter/ChapterEdit";
 import ProductWithCategory from "./components/Admin/Product/ProductWithCategory";
 import ProductUpdateCategory from "./components/Admin/Product/ProductUpdateCategory";
+import SignIn from "./components/Auth/SignIn";
+import SignUp from "./components/Auth/SignUp";
+import Test from "./test";
+import UserProfile from "./components/Page/UserProfile/UserProfile";
+import NotFound from "./components/Page/NotFound/NotFound";
 
 function App() {
+  const { isLoggedIn, role, updateRole } = useAuth(); // Lấy trạng thái đăng nhập, vai trò và hàm cập nhật vai trò từ AuthContext
+
+  useEffect(() => {
+    // Lấy role từ localStorage khi component được render
+    const storedRole = localStorage.getItem('role');
+    if (storedRole) {
+      updateRole(storedRole); // Cập nhật vai trò từ localStorage
+    }
+  }, [updateRole]);
+
   return (
     <>
       <Toaster
@@ -34,36 +43,40 @@ function App() {
         expand={true}
       />
       <Routes>
-        <Route path="/" element={<LayOutHome/>}>
+        {/* Route cho trang chủ */}
+        <Route path="/" element={<LayOutHome />}>
           <Route index element={<HomePage />} />
-          <Route path="/test/:id" element={<Test />}/>
+          <Route path="test" element={<Test />} />
           <Route path="signin" element={<SignIn />} />
           <Route path="signup" element={<SignUp />} />
         </Route>
 
-    
-
-
-
-        <Route path="/admin" element={<LayOutAdmin/>}>
-        <Route path="product">
-          <Route index element={<ProductList/>}/>
-          <Route path="add" element={<ProductAdd/>}/>
-          <Route path="edit/:id" element={<ProductEdit/>}/>
-          <Route path="addCate" element={<ProductWithCategory/>}/>
-          <Route path="updateCate/:id" element={<ProductUpdateCategory/>}/>
+        {/* Route cho trang admin */}
+        <Route path="/admin" element={isLoggedIn && role === "ADMIN" ? <LayOutAdmin /> : <Navigate to="/signin" />}>
+          <Route path="product">
+            <Route index element={<ProductList />} />
+            <Route path="add" element={<ProductAdd />} />
+            <Route path="edit/:id" element={<ProductEdit />} />
+            <Route path="addCate" element={<ProductWithCategory />} />
+            <Route path="updateCate/:id" element={<ProductUpdateCategory />} />
+          </Route>
+          <Route path="category">
+            <Route index element={<CategoryList />} />
+            <Route path="add" element={<CategoryAdd />} />
+            <Route path="edit/:id" element={<CategoryEdit />} />
+          </Route>
+          <Route path="chapter">
+            <Route index element={<ChapterList />} />
+            <Route path="add" element={<ChapterAdd />} />
+            <Route path="edit/:id" element={<ChapterEdit />} />
+          </Route>
         </Route>
-        <Route path="category">
-          <Route index element={<CategorytList/>}/>
-          <Route path="add" element={<CategoryAdd/>}/>
-          <Route path="edit/:id" element={<CategoryEdit/>}/>
-        </Route>
-        <Route path="chapter">
-        <Route index element={<ChapterList/>}/>
-        <Route path="add" element={<ChapterAdd/>}/>
-        <Route path="edit/:id" element={<ChapterEdit/>}/>
-      </Route>
-        </Route>
+
+        {/* Route cho UserProfile */}
+        <Route path="user-profile" element={<UserProfile />} />
+
+        {/* Điều hướng mặc định */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );

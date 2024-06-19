@@ -45,41 +45,41 @@ const ProductBanner = ({ products }) => {
   return (
     <Slider {...settings} className="container m-auto">
       {displayedProducts?.map((item) =>
-        item.comic.status === 1 ? (
+        item?.comic?.status === 1 ? (
             
-            <Link  key={item.comic.id}
-              to={`/product/${item.comic.id}`}
+            <Link  key={item?.comic?.id}
+              to={`/product/${item?.comic?.id}`}
               className="bg-white shadow-md  m-3  h-[556px] overflow-hidden transition-transform duration-300 transform hover:scale-105 product-item relative"
               style={{ position: "relative", overflow: "hidden" }}
-              onMouseEnter={() => handleMouseEnter(item.comic.id)}
+              onMouseEnter={() => handleMouseEnter(item?.comic?.id)}
               onMouseLeave={handleMouseLeave}
             >
               <img
-                src={item.imageUrl}
-                alt={item.comic.name}
+                src={item?.imageUrl}
+                alt={item?.comic.name}
                 className="w-full h-full object-cover object-center"
               />
               <div
                 className={`overlay absolute top-0 left-0 w-full h-full bg-black opacity-0 transition-opacity duration-300 ${
-                  hoveredProductId === item.comic.id ? "opacity-50" : "opacity-0"
+                  hoveredProductId === item?.comic?.id ? "opacity-50" : "opacity-0"
                 }`}
               >
                 {/* Overlay content */}
               </div>
-              {hoveredProductId === item.comic.id && (
+              {hoveredProductId === item?.comic?.id && (
                 <div className="p-4 flex flex-col justify-center items-center absolute top-0 left-0 w-full h-full text-center text-white">
-                  <h2 className="text-lg font-semibold">{item.comic.name}</h2>
-                  <p className="text-sm mb-2">Tác giả: {item.comic.author}</p>
+                  <h2 className="text-lg font-semibold">{item?.comic?.name}</h2>
+                  <p className="text-sm mb-2">Tác giả: {item?.comic?.author}</p>
                   <p className="text-sm mb-2">
-                    {truncateDescription(item.comic.description, 20)}
+                    {truncateDescription(item?.comic?.description, 20)}
                   </p>
                   <div className="flex flex-wrap">
-                    {item.listCategory?.map((category) => (
+                    {item?.listCategory?.map((category) => (
                       <span
-                        key={category}
+                        key={category?.category?.id}
                         className="inline-block bg-gray-200 text-gray-800 text-xs px-2 rounded-full m-1"
                       >
-                        {category}
+                        {category.category?.category}
                       </span>
                     ))}
                   </div>

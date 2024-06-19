@@ -35,8 +35,8 @@ const ProductWithCategory = () => {
   // Sử dụng useMutation để thực hiện mutation khi submit form
   const { mutate, isLoading: isMutating } = useMutation({
     mutationFn: async (formData) => {
-      const { data } = await axiosInstance.put(
-        `/api/v1/comic_detail/update-comic-detail`,
+      const { data } = await axiosInstance.post(
+        `/api/v1/comic_detail/post-comic-detail`,
         formData
       );
       return data;
