@@ -24,6 +24,9 @@ import UserPage from "./components/Page/UserProfile/UserPage";
 
 import ChangePassword from "./components/Page/UserProfile/ChangePassword";
 import UserEdit from "./components/Page/UserProfile/UserEdit";
+import ListUploadImage from "./components/Admin/Content/ListUploadImage";
+import AddUploadImage from "./components/Admin/Content/AddUploadImage";
+import EditUploadImage from "./components/Admin/Content/EditUploadImage";
 
 function App() {
   const { isLoggedIn, role, updateRole } = useAuth(); // Lấy trạng thái đăng nhập, vai trò và hàm cập nhật vai trò từ AuthContext
@@ -85,6 +88,11 @@ function App() {
             <Route index element={<ChapterList />} />
             <Route path="add" element={<ChapterAdd />} />
             <Route path="edit/:id" element={<ChapterEdit />} />
+          </Route>
+          <Route path="image">
+            <Route path=":id" element={<ListUploadImage />} />
+            <Route path="add/:id" element={<AddUploadImage />} />
+            <Route path="edit/:id" element={<EditUploadImage />} />
           </Route>
         </Route>
 

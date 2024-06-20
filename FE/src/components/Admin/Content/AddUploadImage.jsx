@@ -1,10 +1,12 @@
-import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../conf/axiosInstance";
 import { toast } from "sonner";
 
 const AddUploadImage = () => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { id } = useParams(); // Lấy id từ URL path
 
@@ -12,8 +14,12 @@ const AddUploadImage = () => {
   const {
     register,
     handleSubmit,
+    reset, // Thêm reset từ react-hook-form
     formState: { errors },
   } = useForm();
+
+  // State để lưu danh sách các đối tượng File đã chọn
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   // Sử dụng useMutation để thực hiện mutation khi submit form
   const { mutate, isLoading: isMutating } = useMutation({
@@ -30,12 +36,19 @@ const AddUploadImage = () => {
         );
         return response.data;
       } catch (error) {
-        throw new Error(error.response.data.message || "Thêm ảnh không thành công!");
+        throw new Error(
+          error.response?.data?.message || "Thêm ảnh không thành công!"
+        );
       }
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["IMAGE"],
+      });
       toast.success("Thêm ảnh thành công!");
-      navigate("/admin/chapter"); // Chuyển hướng sau khi thành công
+      navigate(`/admin/image/${id}`); // Chuyển hướng sau khi thành công
+      reset(); // Đặt lại giá trị của form sau khi thành công
+      setSelectedFiles([]); // Đặt lại danh sách các file đã chọn về rỗng
     },
     onError: (error) => {
       toast.error(error.message || "Thêm ảnh không thành công!");
@@ -43,28 +56,40 @@ const AddUploadImage = () => {
   });
 
   // Xử lý khi submit form
-  const onSubmit = async (formData) => {
+  const onSubmit = async () => {
+    // Kiểm tra xem có file ảnh nào được chọn không
+    if (!selectedFiles || selectedFiles.length === 0) {
+      toast.error("Bạn cần chọn ít nhất một ảnh.");
+      return;
+    }
+
     const formDataObj = new FormData();
     formDataObj.append("chapter", id); // Sử dụng id từ URL path
 
     // Append each selected file to formDataObj under "image" key
-    for (const file of formData.image) {
-      formDataObj.append("image", file);
+    for (let i = 0; i < selectedFiles.length; i++) {
+      formDataObj.append("image", selectedFiles[i]);
     }
 
-    mutate(formDataObj); // Gọi hàm mutate để gửi dữ liệu lên server
+    mutate(formDataObj);
+  };
+
+  // Xử lý thay đổi khi người dùng chọn file
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setSelectedFiles([...selectedFiles, ...files]);
+  };
+
+  // Xử lý xóa file đã chọn
+  const handleRemoveFile = (index) => {
+    const updatedFiles = [...selectedFiles];
+    updatedFiles.splice(index, 1);
+    setSelectedFiles(updatedFiles);
   };
 
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">Thêm Ảnh Mới</h2>
-      <div className="flex justify-end mb-4">
-        <a href="/admin/chapter">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
-            Quay Lại
-          </button>
-        </a>
-      </div>
 
       <div className="max-w-md">
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -78,9 +103,30 @@ const AddUploadImage = () => {
             <input
               {...register("image", { required: true })}
               type="file"
+              accept="image/*"
+              multiple
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              multiple // Cho phép chọn nhiều file
+              onChange={handleFileChange} // Bắt sự kiện thay đổi khi người dùng chọn file
             />
+            {selectedFiles.length > 0 && (
+              <div className="mt-2">
+                <span className="text-gray-600 text-sm">Đã chọn:</span>
+                <ul className="list-disc list-inside">
+                  {selectedFiles.map((file, index) => (
+                    <li key={index} className="text-gray-600 text-sm flex items-center justify-between">
+                      <span>{index + 1}. {file.name}</span>
+                      <button
+                        type="button"
+                        className="ml-2 text-red-500"
+                        onClick={() => handleRemoveFile(index)}
+                      >
+                        Xóa
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             {errors.image && (
               <span className="text-red-500">Bạn cần chọn ít nhất một ảnh.</span>
             )}
