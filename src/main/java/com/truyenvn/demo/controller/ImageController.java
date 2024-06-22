@@ -1,20 +1,16 @@
 package com.truyenvn.demo.controller;
 
-import com.truyenvn.demo.dto.ComicDetailResponse;
 import com.truyenvn.demo.dto.ImageResponse;
 import com.truyenvn.demo.entity.Chapter;
-import com.truyenvn.demo.entity.ComicDetail;
-import com.truyenvn.demo.entity.Image;
-import com.truyenvn.demo.service.impl.ChapterServiceImpl;
 import com.truyenvn.demo.service.impl.ImageServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,13 +43,24 @@ public class ImageController {
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
+    @GetMapping("get-one-image/{id}")
+    private ResponseEntity getOneImage(@PathVariable UUID id) {
+        return new ResponseEntity<>(service.getOneImage(id), HttpStatus.OK);
+    }
+
     @PostMapping("add-image")
     private ResponseEntity addImage(@RequestParam MultipartFile[] image, @RequestParam Chapter chapter) throws IOException {
         return new ResponseEntity<>(service.addImages(image, chapter), HttpStatus.OK);
     }
 
-//    @PutMapping("update-chapter")
-//    private ResponseEntity updateChapter(@RequestBody Chapter chapter) {
-//        return new ResponseEntity<>(service.updateChapter(chapter), HttpStatus.OK);
-//    }
+    @PutMapping("update-image")
+    private ResponseEntity updateImage(@RequestParam MultipartFile image, @RequestParam UUID id) throws IOException {
+        return new ResponseEntity<>(service.updateImage(image, id), HttpStatus.OK);
+    }
+
+    @DeleteMapping("delete-image/{id}")
+    private ResponseEntity deleteImage(@PathVariable UUID id) {
+        service.deleteImage(id);
+        return new ResponseEntity<>("Success", HttpStatus.OK);
+    }
 }
