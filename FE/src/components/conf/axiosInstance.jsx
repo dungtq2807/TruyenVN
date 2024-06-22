@@ -18,27 +18,23 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Hàm lưu token vào localStorage
-export const storeToken = (token) => {
+// Hàm lưu token và role vào localStorage
+export const storeTokenAndRole = (id, token, role) => {
+  localStorage.setItem('id', id);
   localStorage.setItem('token', token);
-  setTokenTimeout(); // Thiết lập hết hạn của token khi lưu
+  localStorage.setItem('role', role);
 };
 
-// Hàm xóa token khỏi localStorage
-export const clearToken = () => {
+// Hàm xóa token và role khỏi localStorage
+export const clearTokenAndRole = () => {
   localStorage.removeItem('token');
+  localStorage.removeItem('role');
+  localStorage.removeItem('id');
 };
 
-// Hàm thiết lập thời gian hết hạn của token (30 phút)
-const setTokenTimeout = () => {
-  setTimeout(() => {
-    clearToken();
-  }, 30 * 60 * 1000); // 30 phút tính bằng mili giây
+// Hàm lấy role từ localStorage
+export const getRole = () => {
+  return localStorage.getItem('role');
 };
-
-// Xử lý xóa token khi sự kiện beforeunload được kích hoạt
-// window.addEventListener('beforeunload', () => {
-//   clearToken();
-// });
 
 export default axiosInstance;

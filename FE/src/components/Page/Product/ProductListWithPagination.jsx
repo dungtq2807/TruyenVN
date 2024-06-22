@@ -37,7 +37,7 @@ const ProductListWithPagination = ({ products }) => {
           item.comic.status === 1 ? (
             <div key={item.comic.id} className="py-4">
               <Link
-                to={`/product/${item.comic.id}`}
+                to={`/test/${item.comic.id}`}
                 className="flex space-x-4 items-center hover:bg-gray-100 p-4 transition duration-300 ease-in-out"
               >
                 <img
@@ -47,20 +47,21 @@ const ProductListWithPagination = ({ products }) => {
                 />
                 <div className="flex-1">
                   <h2 className="text-lg font-semibold text-gray-800">{item.comic.name}</h2>
+                  <div className="flex flex-wrap">
+                  {item.listCategory?.map((category) => (
+                    <span
+                      key={category.category.id}
+                      className="inline-block bg-gray-200 text-gray-800 text-xs px-2 rounded-full m-1"
+                    >
+                      {category.category.category}
+                    </span>
+                  ))}
+                </div>
                   <p className="text-sm text-gray-600 mb-2">Tác giả: {item.comic.author}</p>
                   <p className="text-sm text-gray-600 mb-2">
                     {truncateDescription(item.comic.description, 20)}
                   </p>
-                  <div className="flex flex-wrap">
-                    {item.listCategory?.map((category) => (
-                      <span
-                        key={category}
-                        className="inline-block bg-gray-200 text-gray-800 text-xs px-2 rounded-full m-1"
-                      >
-                        {category}
-                      </span>
-                    ))}
-                  </div>
+                
                 </div>
               </Link>
             </div>
