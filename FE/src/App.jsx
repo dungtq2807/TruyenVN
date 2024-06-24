@@ -27,6 +27,7 @@ import UserEdit from "./components/Page/UserProfile/UserEdit";
 import ListUploadImage from "./components/Admin/Content/ListUploadImage";
 import AddUploadImage from "./components/Admin/Content/AddUploadImage";
 import EditUploadImage from "./components/Admin/Content/EditUploadImage";
+import StoryDetailPage from "./components/Page/StoryDetailPage/StoryDetailPage";
 
 function App() {
   const { isLoggedIn, role, updateRole } = useAuth(); // Lấy trạng thái đăng nhập, vai trò và hàm cập nhật vai trò từ AuthContext
@@ -59,6 +60,7 @@ function App() {
               <Route path="edit/:id" element={<UserEdit />} />
               <Route path="changepassword" element={<ChangePassword />} />
             </Route>
+            <Route path="detail/:id" element={<StoryDetailPage />} />
         </Route>
 
         {/* Route cho trang admin */}

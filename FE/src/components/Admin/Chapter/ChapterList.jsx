@@ -8,7 +8,7 @@ const ChapterList = () => {
     queryFn: async () => {
       //Hàm queryFn thực hiện yêu cầu GET để lấy dữ liệu từ URL cụ thể
       const { data } = await axiosInstance.get(`/api/v1/chapter/getAll`);
-      // console.log(data);
+      console.log(data);
       return data;
     },
   });

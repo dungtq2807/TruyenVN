@@ -1,79 +1,73 @@
-// src/components/Page/UserProfile/Test.jsx
+import { useState } from "react";
 
-const Test = () => {
-  const user = {
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg"
+// Mock data for story
+const story = {
+  title: "My Story",
+  description:
+    "This is my amazing story. It spans multiple chapters and covers various adventures. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lobortis, lorem in egestas suscipit, nisi mauris venenatis nisi, sit amet lacinia dui felis non libero. Integer et elit consectetur, placerat mi et, lobortis felis. Nulla facilisi. Proin tincidunt diam nec felis luctus, et consectetur elit elementum. Cras ultrices libero eget nunc efficitur bibendum. Sed viverra, sem quis varius sodales, ipsum nulla feugiat metus, id laoreet odio ligula sed est. Nullam dapibus quam in arcu molestie, ut ultricies felis accumsan. Suspendisse potenti. Vivamus sit amet dolor ipsum. Ut pretium venenatis justo nec scelerisque. In hac habitasse platea dictumst. Integer nec sem ac eros efficitur tempus vel in odio.",
+  imageUrl: "https://via.placeholder.com/150", // Example image URL
+};
+
+// Mock data for story chapters
+const storyChapters = [
+  { id: 1, title: "Chapter 1", content: "Lorem ipsum dolor sit amet..." },
+  { id: 2, title: "Chapter 2", content: "Consectetur adipiscing elit..." },
+  // Add more chapters as needed
+];
+
+const StoryDetailPage = () => {
+  const [showDescription, setShowDescription] = useState(false);
+
+  const toggleDescription = () => {
+    setShowDescription(!showDescription);
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-2xl bg-white shadow-md rounded-md">
-        {/* User Info Header */}
-        <div className="bg-gray-200 text-center py-4 rounded-t-md">
-          <img
-            src={user.avatar || 'https://randomuser.me/api/portraits/men/32.jpg'}
-            alt="User Avatar"
-            className="rounded-full w-24 h-24 border-4 border-white mx-auto -mt-12"
-          />
-          <h2 className="text-xl font-semibold">{`${user.firstName} ${user.lastName}`}</h2>
-          <p className="text-sm text-gray-600">{user.email}</p>
+    <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
+      {/* Left section: Chapters and navigation */}
+      <div className="lg:w-3/4 bg-gray-100 p-4 lg:p-8 overflow-y-auto">
+        {/* List of Chapters */}
+        {storyChapters.map((chapter) => (
+          <div key={chapter.id} className="bg-white rounded-lg shadow-lg p-4 lg:p-8 mb-8">
+            <h3 className="text-lg font-semibold mb-2">{chapter.title}</h3>
+            <p className="text-gray-700">{chapter.content}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Right section: Description */}
+      <div className="lg:w-1/4 bg-white p-4 lg:p-8">
+        <div className="mb-4">
+          {/* Story image and title */}
+          <div className="mb-4 text-center">
+            <img
+              src={story.imageUrl}
+              alt={story.title}
+              className="rounded-lg mb-4 max-w-full h-auto mx-auto"
+              style={{ maxWidth: "200px" }}
+            />
+            <h2 className="text-lg font-semibold">{story.title}</h2>
+          </div>
+
+          {/* Description */}
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Story Description</h3>
+            {showDescription ? (
+              <p className="text-gray-700">{story.description}</p>
+            ) : (
+              <p className="text-gray-700">{story.description.slice(0, 100)}...</p>
+            )}
+          </div>
         </div>
-        {/* Form Content */}
-        <div className="p-4">
-          <form>
-            <div className="mb-4">
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                Họ
-              </label>
-              <input
-                type="text"
-                id="firstName"
-                defaultValue={user.firstName}
-                className="mt-1 block w-full px-3 py-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-100"
-                disabled
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                Tên
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                defaultValue={user.lastName}
-                className="mt-1 block w-full px-3 py-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-100"
-                disabled
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                defaultValue={user.email}
-                className="mt-1 block w-full px-3 py-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-100"
-                disabled
-              />
-            </div>
-            <div className="flex justify-end">
-              {/* Save Changes Button */}
-              <button
-                type="button"
-                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition duration-300"
-              >
-                Lưu thay đổi
-              </button>
-            </div>
-          </form>
-        </div>
+        <button
+          onClick={toggleDescription}
+          className="text-blue-600 hover:underline cursor-pointer"
+        >
+          {showDescription ? "Ẩn đi" : "Xem thêm"}
+        </button>
       </div>
     </div>
   );
 };
 
-export default Test;
+export default StoryDetailPage;

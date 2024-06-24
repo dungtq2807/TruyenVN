@@ -37,7 +37,7 @@ const ProductListWithPagination = ({ products }) => {
           item.comic.status === 1 ? (
             <div key={item.comic.id} className="py-4">
               <Link
-                to={`/test/${item.comic.id}`}
+                to={`/detail/${item.comic.id}`}
                 className="flex space-x-4 items-center hover:bg-gray-100 p-4 transition duration-300 ease-in-out"
               >
                 <img

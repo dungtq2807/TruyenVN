@@ -20,7 +20,7 @@ const Product = ({ products }) => {
         item.comic.status === 1 ? (
           <Link
             key={item.comic.id}
-            to={`/product/${item.comic.id}`}
+            to={`/detail/${item.comic.id}`}
             className="bg-white shadow-md rounded-lg overflow-hidden transition-transform duration-300 transform hover:scale-105"
           >
             <img
