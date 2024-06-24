@@ -24,9 +24,9 @@ public class ChapterController {
 
     private final ChapterServiceImpl service;
 
-    @GetMapping("getAll")
-    private ResponseEntity getAllChapter() {
-        return new ResponseEntity<>(service.findAllChapter(), HttpStatus.OK);
+    @GetMapping("getAll/{id}")
+    private ResponseEntity getAllChapter(@PathVariable UUID id) {
+        return new ResponseEntity<>(service.findAllChapter(id), HttpStatus.OK);
     }
 
     @GetMapping("get-one-chapter/{id}")

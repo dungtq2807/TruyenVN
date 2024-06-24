@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface ChapterService {
 
-    List<Chapter> findAllChapter();
+    List<Chapter> findAllChapter(UUID id);
 
     Chapter getOneChapter(UUID id);
 

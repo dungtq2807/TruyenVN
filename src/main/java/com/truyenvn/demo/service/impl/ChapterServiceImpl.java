@@ -20,8 +20,8 @@ public class ChapterServiceImpl implements ChapterService {
     private final ChapterRepository repository;
 
     @Override
-    public List<Chapter> findAllChapter() {
-        return repository.findAll();
+    public List<Chapter> findAllChapter(UUID id) {
+        return repository.findAllByComicId(id);
     }
 
     @Override
