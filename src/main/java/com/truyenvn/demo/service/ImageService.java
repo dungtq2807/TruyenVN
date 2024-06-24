@@ -15,5 +15,9 @@ public interface ImageService {
 
     List<Image> addImages(MultipartFile[] image, Chapter chapter) throws IOException;
 
-    Image updateImage(Image image);
+    ImageResponse getOneImage(UUID id);
+
+    Image updateImage(MultipartFile image, UUID id) throws IOException;
+
+    void deleteImage(UUID id);
 }

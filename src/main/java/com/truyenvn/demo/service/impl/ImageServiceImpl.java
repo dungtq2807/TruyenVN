@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,15 +72,10 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public List<Image> addImages(MultipartFile[] images, Chapter chapter) throws IOException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        // Lấy số thứ tự bắt đầu
-        int startOrder = repository.countByChapter(chapter) + 1;
-
         List<Image> imageList = repository.findAllImageByIdChapter(chapter.getId());
-
         for (MultipartFile image : images) {
             Image img = new Image();
-            img.setCode(String.valueOf(startOrder++)); // Đặt tên file theo số thứ tự và tăng dần
+            img.setCode(image.getOriginalFilename());
             img.setImage(image.getBytes());
             img.setCreatedAt(user.getFullName());
             img.setUpdatedAt(user.getFullName());
@@ -89,11 +85,39 @@ public class ImageServiceImpl implements ImageService {
             img.setChapter(chapter);
             imageList.add(img);
         }
-        return repository.saveAll(imageList); // Lưu tất cả các hình ảnh vào cơ sở dữ liệu
+        return repository.saveAll(imageList);
     }
 
     @Override
-    public Image updateImage(Image image) {
-        return null;
+    public ImageResponse getOneImage(UUID id) {
+        Image image = repository.findById(id).orElse(null);
+        String imageUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("imgChapter/")
+                .path(String.valueOf(id))
+                .toUriString();
+        ImageResponse imageResponse = new ImageResponse().builder()
+                .code(image.getCode())
+                .image(imageUrl)
+                .createdAt(image.getCreatedAt())
+                .updatedAt(image.getUpdatedAt())
+                .dateCreatedAt(image.getDateCreatedAt())
+                .dateUpdatedAt(image.getDateUpdatedAt())
+                .status(image.getStatus())
+                .id(id)
+                .build();
+        return imageResponse;
+    }
+
+    @Override
+    public Image updateImage(MultipartFile images, UUID id) throws IOException {
+        Image image = repository.findById(id).orElse(null);
+        image.setImage(images.getBytes());
+        image.setCode(images.getOriginalFilename());
+        return repository.save(image);
+    }
+
+    @Override
+    public void deleteImage(UUID id) {
+        repository.deleteById(id);
     }
 }
