@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -28,8 +27,6 @@ const ProductImage = ({ products }) => {
     setHoveredProductId(null);
   };
 
-
- 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-6">
       {displayedProducts?.map((item) =>

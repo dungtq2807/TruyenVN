@@ -20,7 +20,7 @@ const Category = () => {
           {data?.map((item) => (
             item.status === 1 && (
               <li key={item.id}>
-                <Link to>{item.category}</Link>
+                <Link to={`/all-comic`}>{item.category}</Link>
               </li>
             )
           ))}
