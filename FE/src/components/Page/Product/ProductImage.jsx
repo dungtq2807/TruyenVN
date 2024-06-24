@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -27,13 +28,15 @@ const ProductImage = ({ products }) => {
     setHoveredProductId(null);
   };
 
+
+ 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-6">
       {displayedProducts?.map((item) =>
         item?.comic?.status === 1 ? (
           <Link
             key={item?.comic?.id}
-            to={`/product/${item?.comic?.id}`}
+            to={`/detail/${item?.comic?.id}`}
             className="bg-white shadow-md rounded-lg h-[400px] overflow-hidden transition-transform duration-300 transform hover:scale-105 product-item relative"
             style={{ position: "relative", overflow: "hidden" }}
             onMouseEnter={() => handleMouseEnter(item?.comic?.id)}

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '../../conf/axiosInstance';
+import { Link } from 'react-router-dom';
 
 const Category = () => {
   // Sử dụng useQuery để lấy danh sách các danh mục từ API
@@ -19,7 +20,7 @@ const Category = () => {
           {data?.map((item) => (
             item.status === 1 && (
               <li key={item.id}>
-                <a>{item.category}</a>
+                <Link to>{item.category}</Link>
               </li>
             )
           ))}

@@ -48,7 +48,7 @@ const ProductBanner = ({ products }) => {
         item?.comic?.status === 1 ? (
             
             <Link  key={item?.comic?.id}
-              to={`/product/${item?.comic?.id}`}
+              to={`/detail/${item?.comic?.id}`}
               className="bg-white shadow-md  m-3  h-[556px] overflow-hidden transition-transform duration-300 transform hover:scale-105 product-item relative"
               style={{ position: "relative", overflow: "hidden" }}
               onMouseEnter={() => handleMouseEnter(item?.comic?.id)}
