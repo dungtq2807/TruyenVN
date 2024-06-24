@@ -94,9 +94,12 @@ const ProductList = () => {
                       <li>
                       <Link to={`/admin/product/updateCate/${product?.listCategory?.map((category)=>category?.id)}`}>edit danh mục</Link>
                       </li>
+                       <li>
+                      <Link to={`/admin/chapter/${product?.comic?.id}`}>chapter</Link>
+                      </li>
                       <li>
                         {" "}
-                        <Link to={`/admin/product/edit/${product.comic.id}`}>edit truyện</Link>
+                        <Link to={`/admin/product/edit/${product?.comic?.id}`}>edit truyện</Link>
                       </li>
                     </ul>
                   </div>

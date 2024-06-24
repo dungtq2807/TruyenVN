@@ -18,8 +18,9 @@ const AddUploadImage = () => {
     formState: { errors },
   } = useForm();
 
-  // State để lưu danh sách các đối tượng File đã chọn
+  // State để lưu danh sách các đối tượng File đã chọn và hiển thị preview
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [filePreviews, setFilePreviews] = useState([]);
 
   // Sử dụng useMutation để thực hiện mutation khi submit form
   const { mutate, isLoading: isMutating } = useMutation({
@@ -46,9 +47,9 @@ const AddUploadImage = () => {
         queryKey: ["IMAGE"],
       });
       toast.success("Thêm ảnh thành công!");
-      navigate(`/admin/image/${id}`); // Chuyển hướng sau khi thành công
       reset(); // Đặt lại giá trị của form sau khi thành công
       setSelectedFiles([]); // Đặt lại danh sách các file đã chọn về rỗng
+      setFilePreviews([]); // Đặt lại danh sách preview về rỗng
     },
     onError: (error) => {
       toast.error(error.message || "Thêm ảnh không thành công!");
@@ -78,13 +79,21 @@ const AddUploadImage = () => {
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     setSelectedFiles([...selectedFiles, ...files]);
+
+    // Generate previews for selected files
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setFilePreviews([...filePreviews, ...previews]);
   };
 
-  // Xử lý xóa file đã chọn
+  // Xử lý xóa file đã chọn và preview tương ứng
   const handleRemoveFile = (index) => {
     const updatedFiles = [...selectedFiles];
     updatedFiles.splice(index, 1);
     setSelectedFiles(updatedFiles);
+
+    const updatedPreviews = [...filePreviews];
+    updatedPreviews.splice(index, 1);
+    setFilePreviews(updatedPreviews);
   };
 
   return (
@@ -108,13 +117,13 @@ const AddUploadImage = () => {
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               onChange={handleFileChange} // Bắt sự kiện thay đổi khi người dùng chọn file
             />
-            {selectedFiles.length > 0 && (
+            {filePreviews.length > 0 && (
               <div className="mt-2">
                 <span className="text-gray-600 text-sm">Đã chọn:</span>
                 <ul className="list-disc list-inside">
-                  {selectedFiles.map((file, index) => (
+                  {filePreviews.map((preview, index) => (
                     <li key={index} className="text-gray-600 text-sm flex items-center justify-between">
-                      <span>{index + 1}. {file.name}</span>
+                      <span>{index + 1}. <img src={preview} alt={`preview-${index}`} className="h-8 w-auto rounded-lg inline-block" /></span>
                       <button
                         type="button"
                         className="ml-2 text-red-500"
