@@ -55,7 +55,7 @@ function App() {
         {/* Route cho trang chủ */}
         <Route path="/" element={<LayOutHome />}>
           <Route index element={<HomePage />} />
-          <Route path="test" element={<Test />} />
+          <Route path="test/:id" element={<Test />} />
           <Route path="signin" element={<SignIn />} />
           <Route path="signup" element={<SignUp />} />
             <Route path="profile" element={<UserPage />}>

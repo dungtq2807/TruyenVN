@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import axiosInstance from "../../conf/axiosInstance";
 import { toast } from "sonner";
 
 const AddUploadImage = () => {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { id } = useParams(); // Lấy id từ URL path
 
   // Sử dụng React Hook Form để quản lý form và validation
