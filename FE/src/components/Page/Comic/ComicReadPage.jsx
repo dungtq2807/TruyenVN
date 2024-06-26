@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../conf/axiosInstance";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import AddFollowComic from "../../Admin/FollowComic/AddFollowComic";
 
 const ComicReadPage = () => {
   const { id } = useParams();
@@ -19,6 +20,7 @@ const ComicReadPage = () => {
         const response = await axiosInstance.get(
           `/api/v1/image/getAll?id=${id}`
         );
+        console.log(response.data);
         return response.data;
       } catch (error) {
         console.error("Error fetching images:", error);
@@ -37,6 +39,7 @@ const ComicReadPage = () => {
       const { data } = await axiosInstance.get(
         `/api/v1/chapter/get-one-chapter/${id}`
       );
+      console.log(data);
       return data;
     },
   });
@@ -52,6 +55,7 @@ const ComicReadPage = () => {
         const { data } = await axiosInstance.get(
           `/api/v1/chapter/getAll/${currentComicId}`
         );
+        console.log(data);
         return data;
       }
       return [];
@@ -89,11 +93,11 @@ const ComicReadPage = () => {
         <div className="flex flex-wrap justify-center">
           {images &&
             images.map((image) => (
-              <div key={image.id} className="relative m-4">
+              <div key={image.id} className="relative">
                 <img
                   src={image.image}
                   alt={image.name}
-                  className="rounded-lg shadow-lg"
+                  className=""
                 />
               </div>
             ))}
@@ -132,7 +136,10 @@ const ComicReadPage = () => {
         >
           Next
         </button>
+     
+        
       </div>
+         <AddFollowComic allChapters={allChapters} currentChapterId={id} />
     </div>
   );
 };

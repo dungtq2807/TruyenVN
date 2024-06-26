@@ -30,6 +30,8 @@ import EditUploadImage from "./components/Admin/Content/EditUploadImage";
 import StoryDetailPage from "./components/Page/StoryDetailPage/StoryDetailPage";
 import AllComic from "./components/Page/Product/AllComic";
 import ComicReadPage from "./components/Page/Comic/ComicReadPage";
+import ListFollowComic from "./components/Admin/FollowComic/ListFollowComic";
+import History from "./components/Page/History/History";
 
 function App() {
   const { isLoggedIn, role, updateRole } = useAuth(); // Lấy trạng thái đăng nhập, vai trò và hàm cập nhật vai trò từ AuthContext
@@ -61,6 +63,7 @@ function App() {
             <Route path="profile" element={<UserPage />}>
               <Route path="edit/:id" element={<UserEdit />} />
               <Route path="changepassword" element={<ChangePassword />} />
+              <Route path="history" element={<History />} />
             </Route>
             <Route path="detail/:id" element={<StoryDetailPage />} />
             <Route path="all-comic" element={<AllComic />} />
@@ -101,6 +104,11 @@ function App() {
             <Route path="add/:id" element={<AddUploadImage />} />
             <Route path="edit/:id" element={<EditUploadImage />} />
           </Route>
+          <Route path="follow">
+          <Route index element={<ListFollowComic />} />
+          
+       
+        </Route>
         </Route>
 
         {/* Route cho UserProfile */}
