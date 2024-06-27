@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../conf/axiosInstance";
 import ProductList from "../Product/ProductList";
+import Comments from "./ListComments";
 
 const StoryDetailPage = () => {
   const { id } = useParams();
@@ -47,6 +48,7 @@ const StoryDetailPage = () => {
             ))}
           </div>
         )}
+        <Comments/>
         <ProductList />
       </div>
 

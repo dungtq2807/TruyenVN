@@ -32,6 +32,12 @@ import AllComic from "./components/Page/Product/AllComic";
 import ComicReadPage from "./components/Page/Comic/ComicReadPage";
 import ListFollowComic from "./components/Admin/FollowComic/ListFollowComic";
 import History from "./components/Page/History/History";
+import FollowComic from "./components/Page/History/ListFollowComic";
+import ListComments from "./components/Admin/Comments/ListComments";
+import EditComments from "./components/Admin/Comments/EditComments";
+import Comments from "./components/Admin/Comments";
+import ProductChapter from "./components/Admin/Chapter";
+
 
 function App() {
   const { isLoggedIn, role, updateRole } = useAuth(); // Lấy trạng thái đăng nhập, vai trò và hàm cập nhật vai trò từ AuthContext
@@ -64,11 +70,13 @@ function App() {
               <Route path="edit/:id" element={<UserEdit />} />
               <Route path="changepassword" element={<ChangePassword />} />
               <Route path="history" element={<History />} />
+              <Route path="follow" element={<FollowComic />} />
             </Route>
             <Route path="detail/:id" element={<StoryDetailPage />} />
             <Route path="all-comic" element={<AllComic />} />
             <Route path="all-comic/:id" element={<AllComic />} />
             <Route path="chapter/:id" element={<ComicReadPage />} />
+
         </Route>
 
         {/* Route cho trang admin */}
@@ -95,6 +103,7 @@ function App() {
             <Route path="edit/:id" element={<CategoryEdit />} />
           </Route>
           <Route path="chapter">
+          <Route index element={<ProductChapter />} />
             <Route path=":id" element={<ChapterList />} />
             <Route path="add" element={<ChapterAdd />} />
             <Route path="edit/:id" element={<ChapterEdit />} />
@@ -106,9 +115,13 @@ function App() {
           </Route>
           <Route path="follow">
           <Route index element={<ListFollowComic />} />
-          
-       
         </Route>
+        <Route path="comments">
+        <Route index element={<Comments />} />
+        <Route path=":id" element={<ListComments />} />
+        <Route path="add/:id" element={<AddUploadImage />} />
+        <Route path="edit/:id" element={<EditComments/>} />
+      </Route>
         </Route>
 
         {/* Route cho UserProfile */}

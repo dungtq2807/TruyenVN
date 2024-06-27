@@ -7,30 +7,26 @@ import { joiResolver } from "@hookform/resolvers/joi";
 import axiosInstance from "../../conf/axiosInstance";
 
 const categorySchema = Joi.object({
-  category: Joi.string().required().min(3),
+  category: Joi.string().required().min(3).messages({
+    "string.empty": "Tên danh mục không được bỏ trống",
+    "string.min": "Tên danh mục phải có ít nhất 3 ký tự",
+  }),
 });
 
 const CategoryAdd = () => {
-  
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: joiResolver(categorySchema),
-    defaultValues: {
-      category: "",
-      // status:0||1 
-     },
   });
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (category) => {
-      const { data } = await axiosInstance.post(
-        `/api/v1/category/add-category`,
-        category
-      );
+      const { data } = await axiosInstance.post(`/api/v1/category/add-category`, category);
       return data;
     },
     onSuccess: () => {
@@ -38,8 +34,7 @@ const CategoryAdd = () => {
       navigate("/admin/category");
     },
     onError: () => {
-      toast.error("Danh mục không được thêm");
-      navigate("/admin/category");
+      toast.error("Không thể thêm danh mục");
     },
   });
 
@@ -66,7 +61,7 @@ const CategoryAdd = () => {
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              {...register("category", { required: true })}
+              {...register("category")}
               type="text"
             />
             {errors?.category && (
@@ -77,6 +72,7 @@ const CategoryAdd = () => {
           <button
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+            disabled={isPending}
           >
             {isPending ? "Đang Thêm..." : "Thêm"}
           </button>

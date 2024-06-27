@@ -8,13 +8,13 @@ import axiosInstance from "../../conf/axiosInstance";
 const ProductAdd = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const [imagePreview, setImagePreview] = useState(""); // State to store image preview URL
+  const [imagePreview, setImagePreview] = useState("");
 
   const { mutate, isLoading } = useMutation({
     mutationFn: async (product) => {
       const formData = new FormData();
       formData.append("name", product.name);
-      formData.append("file", product.image[0]); // Use `file` as the key to match the backend
+      formData.append("file", product.image[0]);
       formData.append("description", product.description);
 
       const { data } = await axiosInstance.post("/api/v1/comic_detail/post-comic", formData, {
@@ -30,7 +30,6 @@ const ProductAdd = () => {
     },
     onError: () => {
       toast.error("Sản phẩm không được thêm");
-      navigate("/admin/product/add");
     },
   });
 
@@ -40,7 +39,6 @@ const ProductAdd = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    // Check if file is an image
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -48,14 +46,14 @@ const ProductAdd = () => {
         setImagePreview(reader.result);
       };
     } else {
-      setImagePreview(""); // Reset image preview if file is not an image
+      setImagePreview("");
     }
   };
 
   return (
     <>
-      <div>ProductAdd</div>
-      <div className="flex justify-end">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">Thêm Sản Phẩm</h1>
         <a href="/admin/product">
           <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
             Quay Lại
@@ -63,26 +61,29 @@ const ProductAdd = () => {
         </a>
       </div>
 
-      <div>
+      <div className="bg-white p-8 rounded-lg shadow-md">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div>
+          <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Tên Sản Phẩm
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              {...register("name", { required: "Tên sản phẩm không được bỏ trống", minLength: { value: 3, message: "Tên sản phẩm phải có ít nhất 3 ký tự" } })}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              {...register("name", {
+                required: "Tên sản phẩm không được bỏ trống",
+                minLength: { value: 3, message: "Tên sản phẩm phải có ít nhất 3 ký tự" },
+              })}
               type="text"
             />
             {errors?.name && <span className="text-red-500">{errors?.name?.message}</span>}
           </div>
 
-          <div>
+          <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Ảnh Sản Phẩm
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               {...register("image", { required: "Ảnh sản phẩm không được bỏ trống" })}
               type="file"
               onChange={handleImageChange}
@@ -93,14 +94,14 @@ const ProductAdd = () => {
             {errors?.image && <span className="text-red-500">{errors?.image.message}</span>}
           </div>
 
-          <div>
+          <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Mô tả Sản Phẩm
             </label>
             <textarea
               cols="30"
               rows="10"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               {...register("description")}
             ></textarea>
           </div>

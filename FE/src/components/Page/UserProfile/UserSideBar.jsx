@@ -10,7 +10,7 @@ const UserSideBar = () => {
         className="fixed  z-40 w-64  transition-transform -translate-x-full sm:translate-x-0"
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 py-4 overflow-y-auto dark:bg-gray-800">
+        <div className="h-full px-3 py-4 overflow-y-auto bg-white dark:bg-gray-800">
           <ul className="space-y-2 font-medium">
           <li>
           <Link
@@ -32,6 +32,16 @@ const UserSideBar = () => {
         </Link>
       </li>
 
+      <li>
+      <Link
+        to={`/profile/follow`}
+        className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+      >
+       
+        <span className="ms-3">Follow Comic</span>
+      </Link>
+    </li>
+
             <li>
               <Link
                 to={`/profile/history`}
@@ -42,7 +52,7 @@ const UserSideBar = () => {
               </Link>
             </li>
           
-
+          
         
           </ul>
         </div>

@@ -14,11 +14,11 @@ const ProductEdit = () => {
       name: "",
       image: "",
       description: "",
-      status:0||1,
+      status: 0 || 1,
     },
   });
 
-  const [imagePreview, setImagePreview] = useState(null); // State to store image preview URL
+  const [imagePreview, setImagePreview] = useState(null);
 
   useQuery({
     queryKey: ["PRODUCT_DETAIL", id],
@@ -50,11 +50,11 @@ const ProductEdit = () => {
       return data;
     },
     onSuccess: () => {
-      toast.success("Sản phẩm đã được thêm thành công!");
+      toast.success("Sản phẩm đã được cập nhật thành công!");
       navigate("/admin/product");
     },
     onError: () => {
-      toast.error("Sản phẩm không được thêm");
+      toast.error("Sản phẩm không được cập nhật");
       navigate(`/admin/product/edit/${id}`);
     },
   });
@@ -63,7 +63,6 @@ const ProductEdit = () => {
     mutate(data);
   };
 
-  // Function to handle file input change and show image preview
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -79,8 +78,8 @@ const ProductEdit = () => {
 
   return (
     <>
-      <div>ProductEdit</div>
-      <div className="flex justify-end">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">Chỉnh sửa Sản Phẩm</h1>
         <a href="/admin/product">
           <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
             Quay Lại
@@ -88,76 +87,82 @@ const ProductEdit = () => {
         </a>
       </div>
 
-      <div>
+      <div className="bg-white p-8 rounded-lg shadow-md">
         <form onSubmit={handleSubmit(onSubmit)}>
           <input type="hidden" {...register("id")} />
 
-          <div>
+          <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Tên Sản Phẩm
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              {...register("name", { required: "Tên sản phẩm không được bỏ trống", minLength: { value: 3, message: "Tên sản phẩm phải có ít nhất 3 ký tự" } })}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              {...register("name", {
+                required: "Tên sản phẩm không được bỏ trống",
+                minLength: { value: 3, message: "Tên sản phẩm phải có ít nhất 3 ký tự" },
+              })}
               type="text"
             />
             {errors?.name && <span className="text-red-500">{errors?.name.message}</span>}
           </div>
 
-          <div>
+          <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Ảnh Sản Phẩm
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               {...register("image")}
               type="file"
-              onChange={handleImageChange} // Handle file input change
+              onChange={handleImageChange}
             />
-            {/* Display image preview if available */}
             {imagePreview && (
-              
-             <div>
-             <h1>Ảnh Mới</h1>
-             <img
-             src={imagePreview}
-             alt="Preview"
-             className="mt-2 max-w-xs max-h-48"
-             
-           /></div>
+              <div>
+                <h1>Ảnh Mới</h1>
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="mt-2 max-w-xs max-h-48"
+                />
+              </div>
             )}
 
             <div>
-            <h1>Ảnh Cũ</h1>
-            <img src={`http://localhost:8080/img/${id}`} alt="" />
+              <h1>Ảnh Cũ</h1>
+              <img src={`http://localhost:8080/img/${id}`} alt="Ảnh cũ" className="mt-2 max-w-xs max-h-48" />
             </div>
-            
           </div>
 
-          <div>
+          <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Mô tả Sản Phẩm
             </label>
             <textarea
               cols="30"
               rows="10"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               {...register("description")}
             ></textarea>
           </div>
-          <div>
-          <select
-            {...register("status")}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          >
-            
-            <option value={1}>Hiện</option>
-            <option value={0}>Ẩn</option>
-          </select>
-        </div>
 
-          <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-            {isLoading ? "Đang Thêm..." : "Thêm"}
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Trạng thái Sản Phẩm
+            </label>
+            <select
+              {...register("status")}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            >
+              <option value={1}>Hiện</option>
+              <option value={0}>Ẩn</option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            {isLoading ? "Đang cập nhật..." : "Cập nhật"}
           </button>
         </form>
       </div>
