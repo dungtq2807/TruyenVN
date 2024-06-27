@@ -32,23 +32,22 @@ const StoryDetailPage = () => {
         {/* Display comic detail if data is loaded */}
         {data && (
           <div className="bg-white rounded-lg shadow-lg p-4 lg:p-8 mb-8">
+            <h1 className="text-2xl font-semibold mb-4">Danh Sách Chương</h1>
             {data.map((chapter) => (
-              <div key={chapter.id}>
-                <Link to={`/chapter/${chapter.id}`} className="text-lg font-semibold mb-2 block">
+              <div key={chapter.id} className="mb-4">
+                <Link to={`/chapter/${chapter.id}`} className="block text-lg font-semibold mb-2 hover:text-blue-600">
                   {chapter.name}
                 </Link>
-                {chapter.comic && (
-                  <>
-                    <p>Name: {chapter.comic.name}</p>
-                    
-                  </>
-                )}
-                <hr />
+                <div className="text-sm text-gray-600">
+                  Ngày tạo: {chapter.comic?.dateCreatedAt}
+                </div>
+                <hr className="my-2 border-gray-300" />
               </div>
             ))}
           </div>
         )}
-        <Comments/>
+        {/* Display comments and related products */}
+        <Comments />
         <ProductList />
       </div>
 
@@ -65,22 +64,20 @@ const StoryDetailPage = () => {
                 className="rounded-lg mb-4 max-w-full h-auto mx-auto"
                 style={{ maxWidth: "200px" }}
               />
-              <h2 className="text-lg font-semibold">{data[0].comic.name}</h2>
+              <h2 className="text-xl font-semibold">{data[0].comic.name}</h2>
             </div>
 
             {/* Description */}
             <div>
               <h3 className="text-lg font-semibold mb-2">Description</h3>
-              {showDescription ? (
-                <p className="text-gray-700">{data[0].comic.description}</p>
-              ) : (
-                <p className="text-gray-700">
-                  {data[0].comic.description.slice(0, 100)}...
-                </p>
-              )}
+              <p className="text-gray-700">
+                {showDescription
+                  ? data[0].comic.description
+                  : `${data[0].comic.description.slice(0, 100)}...`}
+              </p>
               <button
                 onClick={toggleDescription}
-                className="text-blue-600 hover:underline cursor-pointer"
+                className="text-blue-600 hover:underline mt-2 cursor-pointer"
               >
                 {showDescription ? "Hide" : "Read More"}
               </button>
