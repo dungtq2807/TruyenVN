@@ -1,10 +1,13 @@
 package com.truyenvn.demo.service.impl;
 
+import com.truyenvn.demo.dto.ChapterResponse;
 import com.truyenvn.demo.entity.Chapter;
+import com.truyenvn.demo.entity.Comic;
 import com.truyenvn.demo.entity.User;
 import com.truyenvn.demo.repository.ChapterRepository;
 import com.truyenvn.demo.service.ChapterService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,39 @@ public class ChapterServiceImpl implements ChapterService {
     @Override
     public List<Chapter> findAllChapter(UUID id) {
         return repository.findAllByComicId(id);
+    }
+
+    @Override
+    public Page<ChapterResponse> searchChapters(String code, String name, Integer status, Integer page) {
+        Chapter probe = Chapter.builder()
+                .code(code)
+                .name(name)
+                .status(status)
+                .build();
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        Example<Chapter> example = Example.of(probe, matcher);
+
+        Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Direction.ASC, "dateUpdatedAt"));
+        Page<Chapter> chapterPage = repository.findAll(example, pageable);
+        return chapterPage.map(this::convertToChapterResponse);
+    }
+
+    private ChapterResponse convertToChapterResponse(Chapter chapter) {
+        return ChapterResponse.builder()
+                .id(chapter.getId())
+                .code(chapter.getCode())
+                .name(chapter.getName())
+                .status(chapter.getStatus())
+                .createdAt(chapter.getCreatedAt())
+                .updatedAt(chapter.getUpdatedAt())
+                .dateCreatedAt(chapter.getDateCreatedAt())
+                .dateUpdatedAt(chapter.getDateUpdatedAt())
+                .build();
     }
 
     @Override

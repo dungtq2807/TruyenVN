@@ -5,7 +5,7 @@ import com.truyenvn.demo.entity.User;
 import com.truyenvn.demo.repository.CategoryRepository;
 import com.truyenvn.demo.service.CategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +19,24 @@ import java.util.UUID;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository repository;
+
+    @Override
+    public Page<Category> searchCategories(String code, String category, Integer status, Integer page) {
+        Category probe = Category.builder()
+                .code(code)
+                .category(category)
+                .status(status)
+                .build();
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        Example<Category> example = Example.of(probe, matcher);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "dateUpdatedAt"));
+        return repository.findAll(example, pageable);
+    }
 
     @Override
     public List<Category> getAll() {
@@ -51,10 +69,10 @@ public class CategoryServiceImpl implements CategoryService {
         if (existingCategory != null) {
             existingCategory.setDateUpdatedAt(new Date());
             existingCategory.setUpdatedAt(user.getFullName());
-            if(category.getStatus() != null){
+            if (category.getStatus() != null) {
                 existingCategory.setStatus(category.getStatus());
             }
-            if(category.getCategory() != null){
+            if (category.getCategory() != null) {
                 existingCategory.setCategory(category.getCategory());
             }
             return repository.save(existingCategory);

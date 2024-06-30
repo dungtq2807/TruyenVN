@@ -1,5 +1,6 @@
 package com.truyenvn.demo.controller;
 
+import com.truyenvn.demo.dto.ErrorResponse;
 import com.truyenvn.demo.entity.Category;
 import com.truyenvn.demo.entity.Chapter;
 import com.truyenvn.demo.service.impl.CategoryServiceImpl;
@@ -7,13 +8,7 @@ import com.truyenvn.demo.service.impl.ChapterServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -27,6 +22,19 @@ public class ChapterController {
     @GetMapping("getAll/{id}")
     private ResponseEntity getAllChapter(@PathVariable UUID id) {
         return new ResponseEntity<>(service.findAllChapter(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity searchChapters(
+            @RequestParam(required = false) String code,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Integer status,
+            @RequestParam(defaultValue = "0") Integer page) {
+        try {
+            return new ResponseEntity<>(service.searchChapters(code, name, status, page), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(new ErrorResponse("Error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("get-one-chapter/{id}")
