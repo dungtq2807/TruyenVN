@@ -21,8 +21,13 @@ public class ChapterController {
 
     @GetMapping("getAll/{id}")
     private ResponseEntity getAllChapter(@PathVariable UUID id) {
-        return new ResponseEntity<>(service.findAllChapter(id), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(service.findAllChapter(id), HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(new ErrorResponse("Error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
 
     @GetMapping("/search")
     public ResponseEntity searchChapters(
@@ -32,24 +37,36 @@ public class ChapterController {
             @RequestParam(defaultValue = "0") Integer page) {
         try {
             return new ResponseEntity<>(service.searchChapters(code, name, status, page), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(new ErrorResponse("Error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("get-one-chapter/{id}")
     private ResponseEntity getOneChapter(@PathVariable UUID id) {
-        return new ResponseEntity<>(service.getOneChapter(id), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(service.getOneChapter(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorResponse("Error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("add-chapter")
     private ResponseEntity addChapter(@RequestBody Chapter chapter) {
-        return new ResponseEntity<>(service.addChapter(chapter), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(service.addChapter(chapter), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorResponse("Error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("update-chapter")
     private ResponseEntity updateChapter(@RequestBody Chapter chapter) {
-        return new ResponseEntity<>(service.updateChapter(chapter), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(service.updateChapter(chapter), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorResponse("Error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package com.truyenvn.demo.controller;
 
 import com.truyenvn.demo.dto.ComicDetailResponse;
+import com.truyenvn.demo.dto.ErrorResponse;
 import com.truyenvn.demo.entity.Comic;
 import com.truyenvn.demo.entity.ComicDetail;
 import com.truyenvn.demo.service.impl.ComicDetailServiceImpl;
@@ -36,16 +37,34 @@ public class ComicDetailController {
 
     @GetMapping("getAll")
     private ResponseEntity getAllComic(@RequestParam(defaultValue = "0") Integer page) {
-        Page<Comic> comic = comicDetailService.getAll(page);
-        List<ComicDetailResponse> responses = comic.stream().map(comicDetail -> {
-            List<ComicDetail> comicDetails = comicDetailService.findByIdComic(comicDetail.getId());
-            String imageUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("img/")
-                    .path(comicDetail.getId().toString())
-                    .toUriString();
-            return new ComicDetailResponse(comicDetail, comicDetails, imageUrl);
-        }).collect(Collectors.toList());
-        return new ResponseEntity<>(responses, HttpStatus.OK);
+        try {
+            Page<Comic> comic = comicDetailService.getAll(page);
+            List<ComicDetailResponse> responses = comic.stream().map(comicDetail -> {
+                List<ComicDetail> comicDetails = comicDetailService.findByIdComic(comicDetail.getId());
+                String imageUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path("img/")
+                        .path(comicDetail.getId().toString())
+                        .toUriString();
+                return new ComicDetailResponse(comicDetail, comicDetails, imageUrl);
+            }).collect(Collectors.toList());
+            return new ResponseEntity<>(responses, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorResponse("Error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @GetMapping("/search")
+    public ResponseEntity searchComics(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Integer status,
+            @RequestParam(required = false) Integer viewed,
+            @RequestParam(defaultValue = "0") Integer page) {
+        try {
+            return new ResponseEntity<>(comicDetailService.searchComics(name, status, viewed, page), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorResponse("Error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
@@ -69,7 +88,11 @@ public class ComicDetailController {
 
     @GetMapping("get-one-comic-detail/{id}")
     public ResponseEntity<?> getOneComicDetail(@PathVariable UUID id) {
-        return new ResponseEntity<>(comicDetailService.findOneByIdComicDetail(id), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(comicDetailService.findOneByIdComicDetail(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorResponse("Error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("post-comic")
@@ -80,7 +103,7 @@ public class ComicDetailController {
         try {
             return ResponseEntity.ok(comicDetailService.addComic(name, description, file));
         } catch (IOException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new ErrorResponse("Error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -95,7 +118,7 @@ public class ComicDetailController {
         try {
             return ResponseEntity.ok(comicDetailService.updateComic(id, name, description, file,viewed, status));
         } catch (IOException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new ErrorResponse("Error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

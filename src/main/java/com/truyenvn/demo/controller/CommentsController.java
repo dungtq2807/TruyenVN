@@ -34,6 +34,18 @@ public class CommentsController {
             return new ResponseEntity<>(new ErrorResponse("Error", ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/searchComments")
+    public ResponseEntity searchComments(
+            @RequestParam(required = false) String code,
+            @RequestParam(required = false) String comments,
+            @RequestParam(required = false) Integer status,
+            @RequestParam(defaultValue = "0") Integer page) {
+        try {
+            return new ResponseEntity<>(new SuccessResponse("Success",  service.searchComments(code, comments, status, page)), HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(new ErrorResponse("Error", ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @GetMapping("get-one-comment/{id}")
     private ResponseEntity getOneComment(@PathVariable UUID id) {
@@ -67,7 +79,7 @@ public class CommentsController {
     private ResponseEntity deleteComment(@PathVariable UUID id) {
         try {
             service.deleteComment(id);
-            return new ResponseEntity<>(new SuccessResponse().builder().status("Success").build(), HttpStatus.OK);
+            return new ResponseEntity<>(SuccessResponse.builder().status("Success").build(), HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<>(new ErrorResponse("Error", ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -1,6 +1,8 @@
 package com.truyenvn.demo.controller;
 
+import com.truyenvn.demo.dto.ErrorResponse;
 import com.truyenvn.demo.dto.UserResponse;
+import com.truyenvn.demo.entity.Role;
 import com.truyenvn.demo.entity.User;
 import com.truyenvn.demo.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +29,34 @@ public class UserController {
 
     @GetMapping("{id}")
     private ResponseEntity getOne(@PathVariable UUID id) {
-        return ResponseEntity.ok(userService.findByUserByID(id));
+        try {
+            return new ResponseEntity<>(userService.findByUserByID(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorResponse("Error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/searchUsers")
+    public ResponseEntity searchUsers(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) Role role,
+            @RequestParam(defaultValue = "0") Integer page) {
+        try {
+            return new ResponseEntity<>(userService.searchUsers(firstName, lastName, username, role, page), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorResponse("Error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("update-info")
     private ResponseEntity updateInfo(@RequestBody UserResponse user) {
-        return ResponseEntity.ok(userService.saveUser(user));
+        try {
+            return new ResponseEntity<>(userService.saveUser(user), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ErrorResponse("Error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/change-password")

@@ -1,5 +1,6 @@
 package com.truyenvn.demo.service.impl;
 
+import com.truyenvn.demo.dto.CommentResponse;
 import com.truyenvn.demo.dto.CommentsResponse;
 import com.truyenvn.demo.dto.UserResponse;
 import com.truyenvn.demo.entity.Comments;
@@ -7,9 +8,7 @@ import com.truyenvn.demo.entity.User;
 import com.truyenvn.demo.repository.CommentsRepository;
 import com.truyenvn.demo.service.CommentsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -41,7 +40,8 @@ public class CommentsServiceImpl implements CommentsService {
                     commentUser.getUsername(),
                     commentUser.getFirstName(),
                     commentUser.getLastName(),
-                    commentUser.getAvatar()
+                    commentUser.getAvatar(),
+                    commentUser.getRole()
             );
 
             // So sánh ID của người dùng bình luận với ID của người dùng đăng nhập
@@ -62,6 +62,41 @@ public class CommentsServiceImpl implements CommentsService {
         });
     }
 
+    @Override
+    public Page<CommentResponse> searchComments(String code, String comments, Integer status, Integer page) {
+        Comments probe = Comments.builder()
+                .code(code)
+                .comments(comments)
+                .status(status)
+                .build();
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        Example<Comments> example = Example.of(probe, matcher);
+
+        Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Direction.ASC, "dateUpdatedAt"));
+
+        Page<Comments> commentsPage = repository.findAll(example, pageable);
+
+        return commentsPage.map(this::convertToCommentResponse);
+    }
+
+    private CommentResponse convertToCommentResponse(Comments comments) {
+        return CommentResponse.builder()
+                .id(comments.getId())
+                .code(comments.getCode())
+                .comments(comments.getComments())
+                .status(comments.getStatus())
+                .createdAt(comments.getCreatedAt())
+                .updatedAt(comments.getUpdatedAt())
+                .dateCreatedAt(comments.getDateCreatedAt())
+                .dateUpdatedAt(comments.getDateUpdatedAt())
+                .build();
+    }
+
 
     @Override
     public CommentsResponse getOneComment(UUID id) {
@@ -72,7 +107,8 @@ public class CommentsServiceImpl implements CommentsService {
                 commentUser.getUsername(),
                 commentUser.getFirstName(),
                 commentUser.getLastName(),
-                commentUser.getAvatar()
+                commentUser.getAvatar(),
+                commentUser.getRole()
         );
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

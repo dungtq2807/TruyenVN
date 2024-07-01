@@ -1,5 +1,6 @@
 package com.truyenvn.demo.service;
 
+import com.truyenvn.demo.dto.ComicResponse;
 import com.truyenvn.demo.entity.Comic;
 import com.truyenvn.demo.entity.ComicDetail;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,8 @@ import java.util.UUID;
 public interface ComicDetailService {
 
     Page<Comic> getAll(Integer page);
+
+    Page<ComicResponse> searchComics(String name, Integer status,Integer viewed, Integer page);
 
     Comic findOneByIdComic(UUID id);
 

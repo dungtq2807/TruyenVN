@@ -1,5 +1,6 @@
 package com.truyenvn.demo.dto;
 
+import com.truyenvn.demo.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,5 +23,7 @@ public class UserResponse {
     private String username;
 
     private String avatar;
+
+    private Role role;
 
 }

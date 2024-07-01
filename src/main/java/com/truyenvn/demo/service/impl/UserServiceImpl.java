@@ -1,11 +1,13 @@
 package com.truyenvn.demo.service.impl;
 
 import com.truyenvn.demo.dto.UserResponse;
+import com.truyenvn.demo.entity.Role;
 import com.truyenvn.demo.entity.User;
 import com.truyenvn.demo.repository.UserRepository;
 import com.truyenvn.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +27,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse findByUserByID(UUID id) {
         User user = repository.findById(id).orElse(null);
-        UserResponse userResponse = new UserResponse().builder()
+        new UserResponse();
+        UserResponse userResponse = UserResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
                 .firstName(user.getFirstName())
@@ -36,8 +39,48 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Page<UserResponse> searchUsers(String firstName, String lastName, String username, Role role, Integer page) {
+        // Tạo đối tượng User mẫu (probe)
+        User probe = User.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .username(username)
+                .role(role)
+                .build();
+
+        // Tạo ExampleMatcher để bỏ qua giá trị null và chuỗi trống
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        Example<User> example = Example.of(probe, matcher);
+
+        // Tạo đối tượng Pageable
+        Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Direction.ASC, "username"));
+
+        // Tìm tất cả các User theo điều kiện và phân trang
+        Page<User> userPage = repository.findAll(example, pageable);
+
+        // Chuyển đổi Page<User> thành Page<UserResponse>
+        return userPage.map(this::convertToUserResponse);
+    }
+
+    private UserResponse convertToUserResponse(User user) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .username(user.getUsername())
+                .avatar(user.getAvatar())
+                .role(user.getRole())
+                .build();
+    }
+
+    @Override
     public UserResponse saveUser(UserResponse userResponse) {
-        User user1 = repository.findById(userResponse.getId()).orElse(null).builder()
+        repository.findById(userResponse.getId());
+        User user1 = User.builder()
                 .id(userResponse.getId())
                 .username(userResponse.getUsername())
                 .firstName(userResponse.getFirstName())

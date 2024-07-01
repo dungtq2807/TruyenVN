@@ -84,18 +84,19 @@ public class ChapterServiceImpl implements ChapterService {
         if(chapter.getId() == null){
             throw new IllegalArgumentException("Không tìm thấy id");
         }
-        Chapter newChaper = repository.findById(chapter.getId()).orElse(null);
-        newChaper.setUpdatedAt(user.getFullName());
-        newChaper.setDateUpdatedAt(new Date());
+        Chapter newChapter = repository.findById(chapter.getId()).orElse(null);
+        assert newChapter != null;
+        newChapter.setUpdatedAt(user.getFullName());
+        newChapter.setDateUpdatedAt(new Date());
         if(chapter.getStatus() != null){
-            newChaper.setStatus(chapter.getStatus());
+            newChapter.setStatus(chapter.getStatus());
         }
         if(chapter.getComic() != null){
-            newChaper.setComic(chapter.getComic());
+            newChapter.setComic(chapter.getComic());
         }
         if(chapter.getName() != null){
-            newChaper.setName(chapter.getName());
+            newChapter.setName(chapter.getName());
         }
-        return repository.save(newChaper);
+        return repository.save(newChapter);
     }
 }

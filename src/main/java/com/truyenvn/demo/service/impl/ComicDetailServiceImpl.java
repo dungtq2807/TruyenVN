@@ -1,5 +1,6 @@
 package com.truyenvn.demo.service.impl;
 
+import com.truyenvn.demo.dto.ComicResponse;
 import com.truyenvn.demo.entity.Comic;
 import com.truyenvn.demo.entity.ComicDetail;
 import com.truyenvn.demo.entity.User;
@@ -8,9 +9,7 @@ import com.truyenvn.demo.repository.ComicRepository;
 import com.truyenvn.demo.service.ComicDetailService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,6 +36,40 @@ public class ComicDetailServiceImpl implements ComicDetailService {
         Pageable comicDetails = PageRequest.of(page, 20);
         Page<Comic> details = comicRepository.findAll(comicDetails);
         return details;
+    }
+
+    @Override
+    public Page<ComicResponse> searchComics(String name, Integer status,Integer viewed, Integer page) {
+        Comic probe = Comic.builder()
+                .name(name)
+                .status(status)
+                .viewed(viewed)
+                .build();
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        Example<Comic> example = Example.of(probe, matcher);
+        Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Direction.ASC, "dateUpdatedAt"));
+
+        Page<Comic> comicPage = comicRepository.findAll(example, pageable);
+
+        return comicPage.map(this::convertToComicResponse);
+    }
+
+    private ComicResponse convertToComicResponse(Comic comic) {
+        return ComicResponse.builder()
+                .id(comic.getId())
+                .name(comic.getName())
+                .description(comic.getDescription())
+                .viewed(comic.getViewed())
+                .status(comic.getStatus())
+                .createdAt(comic.getCreatedAt())
+                .updatedAt(comic.getUpdatedAt())
+                .dateCreatedAt(comic.getDateCreatedAt())
+                .dateUpdatedAt(comic.getDateUpdatedAt())
+                .build();
     }
 
     @Override
