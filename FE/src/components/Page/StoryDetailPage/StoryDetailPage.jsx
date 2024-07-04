@@ -39,7 +39,7 @@ const StoryDetailPage = () => {
                   {chapter.name}
                 </Link>
                 <div className="text-sm text-gray-600">
-                  Ngày tạo: {chapter.comic?.dateCreatedAt}
+                  Ngày tạo: {new Date(chapter.comic?.dateCreatedAt).toLocaleString()}
                 </div>
                 <hr className="my-2 border-gray-300" />
               </div>
