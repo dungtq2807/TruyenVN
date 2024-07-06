@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 // eslint-disable-next-line react/prop-types
 const ProductListWithPagination = ({ products }) => {
-  const itemsPerPage = 6; // Number of items to display per page (2 columns x 3 rows)
+  const itemsPerPage = 6; // Number of items to display per page (3 columns x 2 rows)
   const [currentPage, setCurrentPage] = useState(1);
 
   // Function to truncate description to a maximum of 20 words
@@ -32,36 +32,35 @@ const ProductListWithPagination = ({ products }) => {
 
   return (
     <div className="container mx-auto">
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {displayedProducts?.map((item) =>
           item.comic.status === 1 ? (
             <div key={item.comic.id} className="py-4">
               <Link
                 to={`/detail/${item.comic.id}`}
-                className="flex space-x-4 items-center hover:bg-gray-100 p-4 transition duration-300 ease-in-out"
+                className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 space-x-0 sm:space-x-4 items-center hover:bg-gray-100 p-4 transition duration-300 ease-in-out"
               >
                 <img
                   src={item.imageUrl}
                   alt={item.comic.name}
-                  className="w-24 h-24 object-cover object-center rounded-lg"
+                  className="w-full sm:w-24 h-24 object-cover object-center rounded-lg"
                 />
-                <div className="flex-1">
+                <div className="flex-1 text-center sm:text-left">
                   <h2 className="text-lg font-semibold text-gray-800">{item.comic.name}</h2>
-                  <div className="flex flex-wrap">
-                  {item.listCategory?.map((category) => (
-                    <span
-                      key={category.category.id}
-                      className="inline-block bg-gray-200 text-gray-800 text-xs px-2 rounded-full m-1"
-                    >
-                      {category.category.category}
-                    </span>
-                  ))}
-                </div>
+                  <div className="flex flex-wrap justify-center sm:justify-start">
+                    {item.listCategory?.map((category) => (
+                      <span
+                        key={category.category.id}
+                        className="inline-block bg-gray-200 text-gray-800 text-xs px-2 rounded-full m-1"
+                      >
+                        {category.category.category}
+                      </span>
+                    ))}
+                  </div>
                   <p className="text-sm text-gray-600 mb-2">Tác giả: {item.comic.author}</p>
                   <p className="text-sm text-gray-600 mb-2">
                     {truncateDescription(item.comic.description, 20)}
                   </p>
-                
                 </div>
               </Link>
             </div>
