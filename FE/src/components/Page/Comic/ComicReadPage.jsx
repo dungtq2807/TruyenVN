@@ -3,6 +3,8 @@ import axiosInstance from "../../conf/axiosInstance";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import AddFollowComic from "../../Admin/FollowComic/AddFollowComic";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const ComicReadPage = () => {
   const { id } = useParams();
@@ -93,11 +95,12 @@ const ComicReadPage = () => {
         <div className="flex flex-wrap justify-center">
           {images &&
             images.map((image) => (
-              <div key={image.id} className="relative">
-                <img
+              <div key={image.id} className="relative ">
+                <LazyLoadImage
                   src={image.image}
                   alt={image.name}
-                  className=""
+                  effect="blur"
+                  className=" m-[-3px]"
                 />
               </div>
             ))}
@@ -136,10 +139,8 @@ const ComicReadPage = () => {
         >
           Next
         </button>
-     
-        
       </div>
-         <AddFollowComic allChapters={allChapters} currentChapterId={id} />
+      <AddFollowComic allChapters={allChapters} currentChapterId={id} />
     </div>
   );
 };
